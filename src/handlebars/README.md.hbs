@@ -1,0 +1,46 @@
+
+What can you do with this?
+
+cicero parse --template . --dsl sample.txt
+
+outputs
+
+```
+9:06:43 PM - info: Loading a default sample.txt file.
+9:06:47 PM - info:
+{
+"$class": "org.accordproject.helloworld.HelloWorldClause",
+"clauseId": "04ae4bb5-f842-4140-91f2-47e9d8b5e75a",
+"name": "Fred Blogs"
+}
+```
+
+cicero execute
+
+```
+9:11:35 PM - info: Using current directory as template folder
+9:11:35 PM - info: Loading a default sample.txt file.
+9:11:35 PM - info: Loading a single default request.json file.
+9:11:35 PM - info: Loading a default state.json file.
+9:11:38 PM - info:
+{
+"clause": "new_contract@0.1.0-a1a36e1816114ec1c2e22f9b615e9efb57b70531f09481c7af96214200887310",
+"request": {
+"$class": "org.accordproject.helloworld.MyRequest",
+"input": "Accord Project"
+},
+"response": {
+"$class": "org.accordproject.helloworld.MyResponse",
+"output": "Hello Fred Blogs Accord Project",
+"transactionId": "edd0a992-1009-4ccd-bee8-b89782268b13",
+"timestamp": "2018-09-10T13:11:38.380Z"
+},
+"state": {
+"$class": "org.accordproject.cicero.contract.AccordContractState",
+"stateId": "org.accordproject.cicero.contract.AccordContractState#1"
+},
+"emit": []
+}
+```
+
+

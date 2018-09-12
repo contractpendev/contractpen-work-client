@@ -1,0 +1,15 @@
+// CTO file
+
+namespace {{data.dataModels.0.ciceroNameSpace}}
+
+import org.accordproject.cicero.contract.* from https://models.accordproject.org/cicero/contract.cto
+import org.accordproject.cicero.runtime.* from https://models.accordproject.org/cicero/runtime.cto
+
+{{#each data.dataModels}}
+{{lowercase ciceroAssetOrTransaction}} {{ciceroClassName}} extends {{ciceroExtendsClass}} {
+{{#each fields}}
+    o {{dataType}} {{fieldName}}
+{{/each}}
+}
+
+{{/each}}

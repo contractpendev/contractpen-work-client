@@ -1,0 +1,13 @@
+{{#each data}}
+
+// --- new file ---
+
+namespace {{ciceroNameSpace}}
+
+{{lowercase ciceroAssetOrTransaction}} {{ciceroClassName}} extends {{ciceroExtendsClass}} {
+{{#each fields}}
+    o {{dataType}} {{fieldName}}
+{{/each}}
+}
+{{/each}}
+
