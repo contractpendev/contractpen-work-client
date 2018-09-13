@@ -15,7 +15,7 @@ ContractPen is a simple web user interface designed to allow people eventually t
 
 Although ContractPen.com is currently closed source, it may become open source in the future. So in that spirit it is useful to encourage open source around the ContractPen API's and integration with other open source projects such as Accord Project.
 
-I encourage you to build open source software around the legaltech software and integration with ContractPen data API's.
+I encourage you to build open source software around the legaltech software and integration with ContractPen data API's and to learn the Accord Project.
 
 ### Required software
 
