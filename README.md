@@ -38,6 +38,8 @@ https://www.npmjs.com/package/@accordproject/ergo-cli
 
 ### Creating a Cicero NodeJS program
 
+Here the data in the ContractPen contract is transformed into a Cicero NodeJS program in a folder. The ContractPen contract in use is this one https://contractpen.com/share/b03d0879-1545-4ce9-bd08-7915457ce92c
+
 Cicero project is a Accord Project library, the purpose of this client contractpen_node_client is to allow a ContractPen.com Contracts data to be deployed to a Cicero NodeJS project.
 
 This will take the data models as defined in the ContractPen contract and generate the Cicero data models as files with the extension of .cto in the models directory. Models are defined in the Models menu section of a ContractPen contract.
