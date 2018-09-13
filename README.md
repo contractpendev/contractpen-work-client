@@ -50,7 +50,7 @@ This will create a folder called cicerofolder and generates a NodeJS project ins
 
 cd cicerofolder
 
-In this folder you should be able to do the following. 
+In this folder you should be able to execute the following without errors.
 
 ```
 npm install
