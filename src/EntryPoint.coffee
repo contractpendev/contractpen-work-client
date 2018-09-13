@@ -11,12 +11,8 @@ start = ->
   setupServer = Setup.container.resolve 'SetupClient'
   setupServer.setup()
 
+# This function is NOT in use, just here for demonstration purpose
 testClauseTemplate = ->
-  console.log(Setup.container)
-  setupGraph = Setup.container.resolve 'SetupGraph'
-  setupGraph.setup()
-
-  # This function is NOT in use, just here for demonstration purpose
   testLatePenaltyInput = {
     "$class": "org.accordproject.latedeliveryandpenalty.LateDeliveryAndPenaltyClause",
     "forceMajeure": true,
