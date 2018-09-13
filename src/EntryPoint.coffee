@@ -8,31 +8,19 @@ Clause = require('@accordproject/cicero-core').Clause
 Engine = require('@accordproject/cicero-engine').Engine
 
 start = ->
-  setupServer = Setup.container.resolve 'SetupClient'
-  setupServer.setup()
+  testClauseTemplate()
+  #setupServer = Setup.container.resolve 'SetupClient'
+  #setupServer.setup()
 
 # This function is NOT in use, just here for demonstration purpose
 testClauseTemplate = ->
   testLatePenaltyInput = {
-    "$class": "org.accordproject.latedeliveryandpenalty.LateDeliveryAndPenaltyClause",
-    "forceMajeure": true,
-    "penaltyDuration": {
-        "$class": "org.accordproject.time.Duration",
-        "amount": 537704789,
-        "unit": "hours"
-    },
-    "penaltyPercentage": 160.789,
-    "capPercentage": 63.475,
-    "termination": {
-        "$class": "org.accordproject.time.Duration",
-        "amount": 4149649232,
-        "unit": "minutes"
-    },
-    "fractionalPart": "seconds",
+    "$class": "org.accordproject.helloworld.HelloWorldClause",
+    "name": "Philip",
     "clauseId": "427c99b0-6df4-11e8-bb3b-67a2e79acc24"
   }
 
-  template = await Template.fromDirectory('C:\\home\\projects\\ContractPen\\cicero-template-library\\src\\latedeliveryandpenalty')
+  template = await Template.fromDirectory('C:\\home\\projects\\contractpen_node_client\\testcicerofolder')
   clause = new Clause(template)
   clause.setData testLatePenaltyInput
   n1 = clause.generateText()
