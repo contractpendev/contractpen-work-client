@@ -80,7 +80,7 @@ class SetupClient
       }
     }
     """
-    await graphQlRequest.request 'http://localhost:4000/graphQl', query
+    await graphQlRequest.request 'http://api.contractpen.com/graphQl', query
 
 module.exports = SetupClient
 
