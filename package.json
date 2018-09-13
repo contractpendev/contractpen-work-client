@@ -11,8 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@accordproject/cicero-core": "^0.7.1",
-    "@accordproject/cicero-engine": "^0.7.1",
+    "@accordproject/cicero-core": "^0.8.0",
+    "@accordproject/cicero-engine": "^0.8.0",
     "@dagrejs/graphlib": "^2.1.4",
     "awilix": "^3.0.9",
     "body-parser": "^1.18.3",
