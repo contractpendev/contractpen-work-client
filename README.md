@@ -48,9 +48,15 @@ run deploy b03d0879-1545-4ce9-bd08-7915457ce92c cicerofolder
 
 This will create a folder called cicerofolder and generates a NodeJS project inside this folder. cicerofolder can be any folder name. The project will be similar to the Cicero HelloWorld project here https://github.com/accordproject/cicero-template-library/tree/master/src/helloworld 
 
-cd cicerofolder 
+cd cicerofolder
 
+In this folder you should be able to do the following. 
+
+```
 npm install
+cicero parse --template . --dsl sample.txt
+cicero execute
+```
 
 ### About the code
 
