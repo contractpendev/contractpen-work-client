@@ -16,6 +16,7 @@ testClauseTemplate = ->
   setupGraph = Setup.container.resolve 'SetupGraph'
   setupGraph.setup()
 
+  # This function is NOT in use, just here for demonstration purpose
   testLatePenaltyInput = {
     "$class": "org.accordproject.latedeliveryandpenalty.LateDeliveryAndPenaltyClause",
     "forceMajeure": true,
@@ -40,19 +41,6 @@ testClauseTemplate = ->
   clause.setData testLatePenaltyInput
   n1 = clause.generateText()
   console.log n1
-
-
-
-
-
-#myActor = Setup.container.resolve('MyActor')
-#myActor.sayHello('phil')
-#myactor.sayHello('philip')
-#gun.get('mark').on (data, key) ->
-#  console.log 'update:', data
-#rootActor = await actorSystem.rootActor()
-#myActor = await rootActor.createChild MyActor
-#myActor.send 'sayHello', 'world'
 
 start()
 

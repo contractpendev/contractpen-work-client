@@ -16,7 +16,7 @@ logger.log('info', 'Startup')
 
 # Setup
 actorSystem = Comedy()
-actorSystem.getLog().setLevel(0)
+actorSystem.getLog().setLevel(0) # Prevent output of log at startup
 
 # Dependency injection
 container = Awilix.createContainer
