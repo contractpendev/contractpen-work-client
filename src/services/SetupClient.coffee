@@ -27,6 +27,7 @@ class SetupClient
 
   idName: (name) -> name.trim().split(' ').join('_').toLowerCase()
 
+  # Executes all handlebars templates and places them in the destination directory
   createProject: (dir, contract) ->
     this.createDirectoryIfNotExist dir
     this.createDirectoryIfNotExist dir + path.sep + 'grammar'
@@ -43,6 +44,7 @@ class SetupClient
     this.createFile dir + path.sep + 'lib' + path.sep + 'logic.ergo', this.template('logic.ergo.hbs', {})
     this.createFile dir + path.sep + 'models' + path.sep + 'model.cto', this.template('model.cto.hbs', {dataModels: contract.contract.dataModels})
 
+  # Executes the handlebars template with the data as given
   template: (file, data) ->
     root = path.dirname(require.main.filename)
     file = fs.readFileSync(root + path.sep + 'handlebars' + path.sep + file, 'utf8')
@@ -50,6 +52,7 @@ class SetupClient
     result = template({data: data}) # result = template({data: d})
     result
 
+  # Creates a file with this contents, the string template
   createFile: (file, template) ->
     fs.writeFileSync file, template,
       encoding: 'utf8'
@@ -61,6 +64,8 @@ class SetupClient
     catch e
       this.doNothing e
 
+  # Constructs a GraphlQL query and then executes that query on api.contractpen.com GraphQL API endpoint.
+  # You may use this URL to test GraphQL queries http://api.contractpen.com/graphQl
   fetchContractJsonFromServer: (guid) ->
     query = """
     query {
