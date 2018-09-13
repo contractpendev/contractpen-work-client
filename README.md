@@ -7,6 +7,10 @@ To compile coffeescript
 
 npm run compile
 
+### ContractPen
+
+ContractPen is a simple web user interface designed to allow people eventually to deploy legal contracts to the blockchain. The current goal is to integrate ContractPen.com with the Accord Project https://www.accordproject.org/ as this project allows legal contract clauses to execute on the blockchain.
+
 ### Creating a Cicero NodeJS program
 
 Cicero project is a Accord Project library, the purpose of this client contractpen_node_client is to allow a ContractPen.com Contracts data to be deployed to a Cicero NodeJS project.
