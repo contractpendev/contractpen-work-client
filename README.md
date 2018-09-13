@@ -11,6 +11,12 @@ npm run compile
 
 ContractPen is a simple web user interface designed to allow people eventually to deploy legal contracts to the blockchain. The current goal is to integrate ContractPen.com with the Accord Project https://www.accordproject.org/ as this project allows legal contract clauses to execute on the blockchain.
 
+### Open Source
+
+Although ContractPen.com is currently closed source, it may become open source in the future. So in that spirit it is useful to encourage open source around the ContractPen API's and integration with other open source projects such as Accord Project.
+
+I encourage you to build open source software around the legaltech software and integration with ContractPen data API's.
+
 ### Required software
 
 1. NodeJS v10.7.0 is the version I am using.
@@ -43,8 +49,6 @@ This will create a folder called cicerofolder and generates a NodeJS project ins
 cd cicerofolder 
 
 npm install
-
-
 
 ### About the code
 
