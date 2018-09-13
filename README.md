@@ -44,7 +44,7 @@ This will take the data models as defined in the ContractPen contract and genera
 
 To run On Windows to deploy a ContractPen contract to a Cicero folder. This first parameter is the GUID of the contract at ContractPen, you can find that in the URL of the contract itself. There is a run.bat batch file.
 
-run deploy 7e472861-4420-4c24-8728-6144201c241d cicerofolder
+run deploy b03d0879-1545-4ce9-bd08-7915457ce92c cicerofolder
 
 This will create a folder called cicerofolder and generates a NodeJS project inside this folder. cicerofolder can be any folder name. The project will be similar to the Cicero HelloWorld project here https://github.com/accordproject/cicero-template-library/tree/master/src/helloworld 
 
