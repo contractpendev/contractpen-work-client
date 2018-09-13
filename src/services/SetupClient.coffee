@@ -51,7 +51,9 @@ class SetupClient
     result
 
   createFile: (file, template) ->
-    fs.writeFileSync(file, template)
+    fs.writeFileSync file, template,
+      encoding: 'utf8'
+      flag: 'w'
 
   createDirectoryIfNotExist: (dir) ->
     try
