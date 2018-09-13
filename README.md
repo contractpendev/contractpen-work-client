@@ -34,7 +34,7 @@ https://www.npmjs.com/package/@accordproject/ergo-cli
 
 Cicero project is a Accord Project library, the purpose of this client contractpen_node_client is to allow a ContractPen.com Contracts data to be deployed to a Cicero NodeJS project.
 
-To run On Windows to deploy a ContractPen contract to a Cicero folder. This first parameter is the GUID of the contract at ContractPen. There is a run.bat batch file.
+To run On Windows to deploy a ContractPen contract to a Cicero folder. This first parameter is the GUID of the contract at ContractPen, you can find that in the URL of the contract itself. There is a run.bat batch file.
 
 run deploy 7e472861-4420-4c24-8728-6144201c241d cicerofolder
 
