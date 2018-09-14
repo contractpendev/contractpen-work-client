@@ -6,7 +6,7 @@ import org.accordproject.cicero.contract.* from https://models.accordproject.org
 import org.accordproject.cicero.runtime.* from https://models.accordproject.org/cicero/runtime.cto
 
 {{#each data.dataModels}}
-{{lowercase ciceroAssetOrTransaction}} {{ciceroClassName}} extends {{ciceroExtendsClass}} {
+{{lowercase ciceroAssetOrTransaction}} {{ciceroClassName}}{{#if (equalsLength ciceroExtendsClass 0)}}{{else}} extends {{ciceroExtendsClass}}{{/if}} {
 {{#each fields}}
     o {{dataType}} {{fieldName}}
 {{/each}}
