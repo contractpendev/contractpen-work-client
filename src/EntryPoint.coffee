@@ -8,9 +8,8 @@ Clause = require('@accordproject/cicero-core').Clause
 Engine = require('@accordproject/cicero-engine').Engine
 
 start = ->
-  testClauseTemplate()
-  #setupServer = Setup.container.resolve 'SetupClient'
-  #setupServer.setup()
+  setupServer = Setup.container.resolve 'SetupClient'
+  setupServer.setup()
 
 # This function is NOT in use, just here for demonstration purpose
 testClauseTemplate = ->
