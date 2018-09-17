@@ -64,8 +64,9 @@ class SetupClient
 
   subscribeCluster: (serverId, port) ->
     socket = new ClusterWS(url: 'ws://localhost:3050')
-    socket.on 'myeventname', (data) ->
-      console.log 'hello'
+    socket.on 'serverConnected', (data) ->
+      console.log 'Server called back, that means we can accept a command from the server'
+      socket.send 'clientReadyToAcceptCommands', 'ok'
       # your code to execute on event
       return
     # executed when client is connected to the server
