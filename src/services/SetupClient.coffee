@@ -9,6 +9,7 @@ graphQlRequest = require 'graphql-request'
 program = require 'commander'
 path = require 'path'
 ClusterWS = require './../../node_modules/clusterws-client-js/dist/index.js'
+request = require('request')
 
 class SetupClient
 
@@ -16,6 +17,12 @@ class SetupClient
     @g = opts.graph
 
   setup: () ->
+
+    console.log '--help for command reference'
+
+    program.usage('testwork <server ip address> <server port>').command('testwork <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
+      console.log 'send test work event'
+      await this.sendTestWorkEvent serverIp, serverPort
 
     # Deploy a ContractPen contract to an Accord Project folder structure
     program.usage('deploy <guid> <dir>').command('deploy <guid> <dir>').action (guid, directoryToCreate, cmd) =>
@@ -32,6 +39,24 @@ class SetupClient
 
     program.parse process.argv
 
+  # Submit test task to the server
+  sendTestWorkEvent: (serverId, port) ->
+    request.post {
+      url: "http://#{serverId}:#{port}/api/submitTask"
+      body: { test: 1 }
+      json: true
+    }, (error, response, body) ->
+      if error
+        return console.error('upload failed:', error)
+      console.log 'Upload successful!  Server responded with:', body
+      return
+
+
+    #request.post "http://#{serverId}:#{port}/api/submitTask", { json: true }, (err, res, body) ->
+    #  if err
+    #    return console.log(err)
+    #  console.log body
+    #  return
 
   subscribeCluster: (serverId, port) ->
     socket = new ClusterWS(url: 'ws://localhost:3050')
