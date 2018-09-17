@@ -47,7 +47,7 @@ class SetupClient
       json: true
     }, (error, response, body) ->
       if error
-        return console.error('upload failed:', error)
+        return console.error('failed to send work test event:', error)
       console.log 'Upload successful!  Server responded with:', body
       return
 
