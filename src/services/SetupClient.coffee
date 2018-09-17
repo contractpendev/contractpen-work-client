@@ -64,11 +64,18 @@ class SetupClient
 
   subscribeCluster: (serverId, port) ->
     socket = new ClusterWS(url: 'ws://localhost:3050')
+
+    # Client must execute the job as given from the server and reply the result back to the server
+    socket.on 'executeJob', (job) ->
+      console.log 'client executing job'
+
+    # When the server is connected we send back to the server that we are ready to accept commands
     socket.on 'serverConnected', (data) ->
       console.log 'Server called back, that means we can accept a command from the server'
       socket.send 'clientReadyToAcceptCommands', 'ok'
       # your code to execute on event
       return
+
     # executed when client is connected to the server
     socket.on 'connect', ->
       console.log 'connected websocket clusterws'
