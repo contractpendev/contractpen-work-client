@@ -8,7 +8,7 @@ fs = require 'fs'
 graphQlRequest = require 'graphql-request'
 program = require 'commander'
 path = require 'path'
-WebSocketClient = require('websocket').client
+ClusterWS = require './../../node_modules/clusterws-client-js/dist/index.js'
 
 class SetupClient
 
@@ -17,50 +17,42 @@ class SetupClient
 
   setup: () ->
 
+    # Deploy a ContractPen contract to an Accord Project folder structure
     program.usage('deploy <guid> <dir>').command('deploy <guid> <dir>').action (guid, directoryToCreate, cmd) =>
       console.log 'deploying guid ' + guid
       console.log 'to directory ' + directoryToCreate
       contractJson = await this.fetchContractJsonFromServer guid
       this.createProject directoryToCreate, contractJson
 
+    # Subscribe to server to await work events
     program.usage('subscribe <server ip address> <server port>').command('subscribe <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
       console.log 'subscribe, attempting to subscribe to server for work'
       console.log 'attempting ' + serverIp + ':' + serverPort
-      this.subscribeForWorkFromServerUsingWebsockets serverIp, serverPort
+      this.subscribeCluster serverIp, serverPort
 
     program.parse process.argv
 
 
-
-
-  subscribeForWorkFromServerUsingWebsockets: (serverIp, port) ->
-    client = new WebSocketClient
-    client.on 'connectFailed', (error) ->
-      console.log 'Connect Error: ' + error.toString()
+  subscribeCluster: (serverId, port) ->
+    socket = new ClusterWS(url: 'ws://localhost:3050')
+    socket.on 'myeventname', (data) ->
+      console.log 'hello'
+      # your code to execute on event
       return
-    client.on 'connect', (connection) ->
-
-    #sendNumber = ->
-    #  if connection.connected
-    #    number = Math.round(Math.random() * 0xFFFFFF)
-    #    connection.sendUTF number.toString()
-    #    setTimeout sendNumber, 1000
-    #  return
-
-      console.log 'WebSocket Client Connected'
-      connection.on 'error', (error) ->
-        console.log 'Connection Error: ' + error.toString()
-        return
-      connection.on 'close', ->
-        console.log 'echo-protocol Connection Closed'
-        return
-      connection.on 'message', (message) ->
-        if message.type == 'utf8'
-          console.log 'Received: \'' + message.utf8Data + '\''
-        return
-      #sendNumber()
+    # executed when client is connected to the server
+    socket.on 'connect', ->
+      console.log 'connected websocket clusterws'
+      # your code to execute on connect event
       return
-    client.connect "ws://#{serverIp}:#{port}/", 'echo-protocol'
+    # executed when error has happened
+    socket.on 'error', (err) ->
+      # your code to execute on error event
+      return
+    # executed when client is disconnected from the server
+    socket.on 'disconnect', (code, reason) ->
+      # your code to execute on disconnect event
+      return
+
 
   doNothing: (error) -> 0
 

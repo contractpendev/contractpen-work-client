@@ -17,6 +17,7 @@
     "awilix": "^3.0.9",
     "body-parser": "^1.18.3",
     "clear-module": "^3.0.0",
+    "clusterws-client-js": "git+https://github.com/fundon/ClusterWS-Client-JS.git",
     "comedy": "^1.6.0",
     "commander": "^2.18.0",
     "express": "^4.16.3",
@@ -26,7 +27,7 @@
     "html-entities": "^1.2.1",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
-    "websocket": "^1.0.26",
+    "uws": "^10.148.1",
     "winston": "^3.0.0"
   },
   "devDependencies": {
