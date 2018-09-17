@@ -8,6 +8,7 @@ fs = require 'fs'
 graphQlRequest = require 'graphql-request'
 program = require 'commander'
 path = require 'path'
+WebSocketClient = require('websocket').client
 
 class SetupClient
 
@@ -15,13 +16,51 @@ class SetupClient
     @g = opts.graph
 
   setup: () ->
+
     program.usage('deploy <guid> <dir>').command('deploy <guid> <dir>').action (guid, directoryToCreate, cmd) =>
       console.log 'deploying guid ' + guid
       console.log 'to directory ' + directoryToCreate
       contractJson = await this.fetchContractJsonFromServer guid
       this.createProject directoryToCreate, contractJson
 
+    program.usage('subscribe <server ip address> <server port>').command('subscribe <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
+      console.log 'subscribe, attempting to subscribe to server for work'
+      console.log 'attempting ' + serverIp + ':' + serverPort
+      this.subscribeForWorkFromServerUsingWebsockets serverIp, serverPort
+
     program.parse process.argv
+
+
+
+
+  subscribeForWorkFromServerUsingWebsockets: (serverIp, port) ->
+    client = new WebSocketClient
+    client.on 'connectFailed', (error) ->
+      console.log 'Connect Error: ' + error.toString()
+      return
+    client.on 'connect', (connection) ->
+
+    #sendNumber = ->
+    #  if connection.connected
+    #    number = Math.round(Math.random() * 0xFFFFFF)
+    #    connection.sendUTF number.toString()
+    #    setTimeout sendNumber, 1000
+    #  return
+
+      console.log 'WebSocket Client Connected'
+      connection.on 'error', (error) ->
+        console.log 'Connection Error: ' + error.toString()
+        return
+      connection.on 'close', ->
+        console.log 'echo-protocol Connection Closed'
+        return
+      connection.on 'message', (message) ->
+        if message.type == 'utf8'
+          console.log 'Received: \'' + message.utf8Data + '\''
+        return
+      #sendNumber()
+      return
+    client.connect "ws://#{serverIp}:#{port}/", 'echo-protocol'
 
   doNothing: (error) -> 0
 
