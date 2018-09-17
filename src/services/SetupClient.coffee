@@ -41,9 +41,13 @@ class SetupClient
 
   # Submit test task to the server
   sendTestWorkEvent: (serverId, port) ->
+    workData =
+      command: 'deploy'
+      params: ['b03d0879-1545-4ce9-bd08-7915457ce92c', 'testcicerofolder']
+
     request.post {
       url: "http://#{serverId}:#{port}/api/submitTask"
-      body: { test: 1 }
+      body: workData
       json: true
     }, (error, response, body) ->
       if error
