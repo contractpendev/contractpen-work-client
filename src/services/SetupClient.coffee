@@ -51,7 +51,6 @@ class SetupClient
   # Submit test task to the server
   sendTestWorkEvent: (workerId, serverId, port) ->
     workData =
-      uuid: uuidv1()
       fromWorkerId: workerId
       targetWorkerId: null
       sendResultToWorkerId: null
@@ -87,6 +86,7 @@ class SetupClient
         console.log 'deploying contract ' + job.params[0] + ' ' + job.params[1]
         @deploy job.params[0], job.params[1]
         socket.send 'finishedJob',
+          workerId: @getWorkerId()
           job: job
           result: 'unknown'
       return
