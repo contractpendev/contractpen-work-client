@@ -147,8 +147,10 @@ class SetupClient
           success = true
         workerId = @getWorkerId()
         socket.send 'finishedJob',
+          workerId: @getWorkerId()
           job: job
           result:
+            job: job
             workerId: @getWorkerId()
             deployedContractPenId: job.params[0]
             deployedContractPenAtPath: job.params[1]
