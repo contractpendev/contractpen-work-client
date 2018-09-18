@@ -12,6 +12,7 @@ ClusterWS = require './../../node_modules/clusterws-client-js/dist/index.js'
 request = require 'request'
 uuidv1 = require 'uuid/v1'
 ContractMetadata = require './ContractMetadata'
+ContractExecution = require './ContractExecution'
 prettyjson = require 'prettyjson'
 
 class SetupClient
@@ -49,6 +50,11 @@ class SetupClient
       json = await @extract directory, jsonFile, true
       @createFile jsonFile, JSON.stringify(json)
 
+    program.usage('execute <dir>').command('execute <dir>').action (directory, cmd) =>
+      console.log 'execute cicero'
+      result = await @execute directory
+      console.log result
+
     # Subscribe to server to await work events
     program.usage('subscribe <server ip address> <server port>').command('subscribe <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
       console.log 'subscribe, attempting to subscribe to server for work'
@@ -78,6 +84,15 @@ class SetupClient
     #console.log c
     # structure of c is [project_path, cto_paths: [ctoPath, json]]
     #console.log 'finished extract'
+
+  execute: (directory) =>
+    console.log 'try execute'
+    templatePath = 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate'
+    samplePath = 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\sample.txt'
+    requestsPath = ['C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\request.json']
+    statePath = 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\state.json'
+    exec = new ContractExecution()
+    exec.execute(templatePath, samplePath, requestsPath, statePath)
 
   # Submit test task to the server
   sendTestWorkEvent: (workerId, serverId, port) ->
