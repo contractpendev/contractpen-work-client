@@ -29,6 +29,7 @@
     "handlebars": "^4.0.12",
     "handlebars-helpers": "^0.10.0",
     "html-entities": "^1.2.1",
+    "json-decycle": "^1.0.0",
     "prettyjson": "^1.2.1",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",

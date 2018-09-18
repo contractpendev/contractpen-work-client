@@ -41,7 +41,8 @@ class SetupClient
     # Extract JSON from Cicero projects
     program.usage('extract <dir> <to json file>').command('extract <dir> <to json file>').action (directory, jsonFile, cmd) =>
       console.log 'extract directory to json file'
-      @extract directory, jsonFile
+      json = await @extract directory, jsonFile
+      @createFile jsonFile, JSON.stringify(json)
 
     # Subscribe to server to await work events
     program.usage('subscribe <server ip address> <server port>').command('subscribe <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
@@ -59,9 +60,15 @@ class SetupClient
     meta = new ContractMetadata()
     i = await meta.iterateFoldersInDirectory directory
     c = await meta.directoriesToJson i
+    m = await meta.metaDataOfDirectoriesJson c
+    m
+
+    #m = await meta.metaDataOfProject 'C:\\home\\projects\\accord\\cicero-template-library\\src\\fragile-goods'
+    #console.log m
+    #console.log 'collected all metadata'
     #console.log c
     # structure of c is [project_path, cto_paths: [ctoPath, json]]
-    console.log 'finished extract'
+    #console.log 'finished extract'
 
   # Submit test task to the server
   sendTestWorkEvent: (workerId, serverId, port) ->

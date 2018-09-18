@@ -5,9 +5,11 @@ fs = require 'fs'
 path = require 'path'
 Template = require('@accordproject/cicero-core').Template
 Clause = require('@accordproject/cicero-core').Clause
+#MetaData = require('@accordproject/cicero-core/lib/metadata')
 Engine = require('@accordproject/cicero-engine').Engine
 Ergo = require('@accordproject/ergo-compiler/lib/ergo')
 find = require 'find'
+decycle = require('json-decycle').decycle
 
 class ContractMetadata
 
@@ -67,6 +69,47 @@ class ContractMetadata
         cto_paths: c
 
     return result
+
+  metaDataOfDirectoriesJson: (d) =>
+    result = []
+    for x in d
+      meta = await @metaDataOfProject x.project_path
+      console.log 'done'
+      result.push
+        project_path: x.project_path
+        cto_paths: x.cto_paths
+        meta_data: meta
+    result
+
+  metaDataOfProject: (projectDirectory) =>
+    try
+      template = await Template.fromDirectory projectDirectory
+      hash = template.getHash()
+      identifier = template.getIdentifier()
+      metadata = template.getMetadata()
+      templateAst = template.getTemplateAst()
+      # a string of the grammar
+      grammar = template.getTemplatizedGrammar()
+      # arrays of strings
+      requestTypes = template.getRequestTypes()
+      responseTypes = template.getResponseTypes()
+      emitTypes = template.getEmitTypes()
+      stateTypes = template.getStateTypes()
+
+      result =
+        hash: hash
+        identifier: identifier
+        metadata: metadata
+        templateAst: templateAst
+        grammar: grammar
+        requestTypes: requestTypes
+        responseTypes: responseTypes
+        emitTypes: emitTypes
+        stateTypes: stateTypes
+
+      result
+    catch ex
+      console.log ex
 
   # ?
   directoriesIn: (directory) =>
