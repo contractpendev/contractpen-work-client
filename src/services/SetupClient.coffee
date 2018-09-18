@@ -13,6 +13,7 @@ request = require 'request'
 uuidv1 = require 'uuid/v1'
 ContractMetadata = require './ContractMetadata'
 ContractExecution = require './ContractExecution'
+ContractTemplate = require './ContractTemplate'
 prettyjson = require 'prettyjson'
 
 class SetupClient
@@ -32,6 +33,11 @@ class SetupClient
       console.log 'send test work event'
       workerId = @getWorkerId()
       await @sendTestWorkEvent workerId, serverIp, serverPort
+
+    # Deploy a ContractPen contract to an Accord Project folder structure
+    program.usage('template <input json file> <directory of project>').command('template <input json file> <directory of project>').action (inputJsonFile, directory, cmd) =>
+      console.log 'template ' + inputJsonFile + ' directory ' + directory
+      await @templateProcess inputJsonFile, directory
 
     # Deploy a ContractPen contract to an Accord Project folder structure
     program.usage('deploy <guid> <dir>').command('deploy <guid> <dir>').action (guid, directoryToCreate, cmd) =>
@@ -66,6 +72,10 @@ class SetupClient
   deploy: (guid, directoryToCreate) =>
     contractJson = await @fetchContractJsonFromServer guid
     await @createProject directoryToCreate, contractJson
+
+  templateProcess: (inputJsonFile, directory) =>
+    t = new ContractTemplate()
+    await t.template(inputJsonFile, directory)
 
   extract: (directory, jsonFile, isMulti) =>
     meta = new ContractMetadata()
