@@ -140,11 +140,20 @@ class SetupClient
 
       if (job.command == 'deploy')
         console.log 'deploying contract ' + job.params[0] + ' ' + job.params[1]
-        @deploy job.params[0], job.params[1]
+        result = @deploy job.params[0], job.params[1]
+        # If the directory exists then we say success
+        success = false
+        if fs.existsSync(job.params[1])
+          success = true
+        workerId = @getWorkerId()
         socket.send 'finishedJob',
-          workerId: @getWorkerId()
           job: job
-          result: 'unknown'
+          result:
+            workerId: @getWorkerId()
+            deployedContractPenId: job.params[0]
+            deployedContractPenAtPath: job.params[1]
+            success: success
+            workerId: workerId
       return
 
     # When the server is connected we send back to the server that we are ready to accept commands
