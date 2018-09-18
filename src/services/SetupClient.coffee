@@ -11,6 +11,7 @@ path = require 'path'
 ClusterWS = require './../../node_modules/clusterws-client-js/dist/index.js'
 request = require 'request'
 uuidv1 = require 'uuid/v1'
+ContractMetadata = require './ContractMetadata'
 
 class SetupClient
 
@@ -36,6 +37,11 @@ class SetupClient
       console.log 'to directory ' + directoryToCreate
       @deploy guid, directoryToCreate
 
+    # Extract JSON from Cicero projects
+    program.usage('extract <dir> <to json file>').command('extract <dir> <to json file>').action (directory, jsonFile, cmd) =>
+      console.log 'extract directory to json file'
+      @extract directory, jsonFile
+
     # Subscribe to server to await work events
     program.usage('subscribe <server ip address> <server port>').command('subscribe <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
       console.log 'subscribe, attempting to subscribe to server for work'
@@ -47,6 +53,16 @@ class SetupClient
   deploy: (guid, directoryToCreate) =>
     contractJson = await @fetchContractJsonFromServer guid
     await @createProject directoryToCreate, contractJson
+
+  extract: (directory, jsonFile) =>
+    meta = new ContractMetadata()
+    i = await meta.iterateFoldersInDirectory directory
+    console.log i
+    console.log i.length
+
+    console.log x.project_path for x in i
+
+    console.log 'finished extract'
 
   # Submit test task to the server
   sendTestWorkEvent: (workerId, serverId, port) ->
