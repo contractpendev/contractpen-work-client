@@ -16,7 +16,7 @@ class SetupClient
 
   constructor: (opts) ->
     @g = opts.graph
-    @clientIdentity = opts.clientIdentity
+    @clientIdentity = opts.clientIdentity.uuid
 
   getWorkerId: () =>
     @clientIdentity
@@ -86,7 +86,9 @@ class SetupClient
       if (job.command == 'deploy')
         console.log 'deploying contract ' + job.params[0] + ' ' + job.params[1]
         @deploy job.params[0], job.params[1]
-        socket.send 'finishedJob', job
+        socket.send 'finishedJob',
+          job: job
+          result: 'unknown'
       return
 
     # When the server is connected we send back to the server that we are ready to accept commands
