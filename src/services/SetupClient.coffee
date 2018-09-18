@@ -38,10 +38,15 @@ class SetupClient
       console.log 'to directory ' + directoryToCreate
       @deploy guid, directoryToCreate
 
+    program.usage('export <dir> <to json file>').command('export <dir> <to json file>').action (directory, jsonFile, cmd) =>
+      console.log 'extract single directory to json file'
+      json = await @extract directory, jsonFile, false
+      @createFile jsonFile, JSON.stringify(json)
+
     # Extract JSON from Cicero projects
-    program.usage('extract <dir> <to json file>').command('extract <dir> <to json file>').action (directory, jsonFile, cmd) =>
-      console.log 'extract directory to json file'
-      json = await @extract directory, jsonFile
+    program.usage('exportmulti <dir> <to json file>').command('exportmulti <dir> <to json file>').action (directory, jsonFile, cmd) =>
+      console.log 'extract multiple directory to json file'
+      json = await @extract directory, jsonFile, true
       @createFile jsonFile, JSON.stringify(json)
 
     # Subscribe to server to await work events
@@ -56,9 +61,13 @@ class SetupClient
     contractJson = await @fetchContractJsonFromServer guid
     await @createProject directoryToCreate, contractJson
 
-  extract: (directory, jsonFile) =>
+  extract: (directory, jsonFile, isMulti) =>
     meta = new ContractMetadata()
-    i = await meta.iterateFoldersInDirectory directory
+    if isMulti
+      i = await meta.iterateFoldersInDirectory directory
+    else
+      i = await meta.singleDirectory directory
+
     c = await meta.directoriesToJson i
     m = await meta.metaDataOfDirectoriesJson c
     m

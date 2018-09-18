@@ -51,6 +51,24 @@ class ContractMetadata
         cto_paths: ctoPathsResult
     return result
 
+  # @todo Deduplicate method singleDirectory and iterateFoldersInDirectory
+  singleDirectory: (directory) =>
+    dir = [directory]
+    result = []
+    dir.map (d) ->
+      c = []
+      files = find.fileSync d
+      files.map (f) ->
+        if f.toLowerCase().endsWith('.cto')
+          c.push f
+
+      #console.log f
+      result.push
+        project_path: d
+        cto_paths: c
+
+    return result
+
   # Finds all cto models
   # @todo Make more async
   iterateFoldersInDirectory: (directory) =>
