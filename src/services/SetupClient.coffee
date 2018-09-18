@@ -52,7 +52,8 @@ class SetupClient
   sendTestWorkEvent: (workerId, serverId, port) ->
     workData =
       uuid: uuidv1()
-      workerId: workerId
+      fromWorkerId: workerId
+      toWorkerId: null
       command: 'deploy'
       params: ['b03d0879-1545-4ce9-bd08-7915457ce92c', 'testcicerofolder']
 
@@ -84,8 +85,8 @@ class SetupClient
       if (job.command == 'deploy')
         console.log 'deploying contract ' + job.params[0] + ' ' + job.params[1]
         @deploy job.params[0], job.params[1]
-        socket.send 'finishedJob', 'jobid'
-      console.log 'client executing job'
+        socket.send 'finishedJob', job
+      return
 
     # When the server is connected we send back to the server that we are ready to accept commands
     socket.on 'serverConnected', (data) ->
