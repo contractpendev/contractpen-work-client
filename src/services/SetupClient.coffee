@@ -53,7 +53,8 @@ class SetupClient
     workData =
       uuid: uuidv1()
       fromWorkerId: workerId
-      toWorkerId: null
+      targetWorkerId: null
+      sendResultToWorkerId: null
       command: 'deploy'
       params: ['b03d0879-1545-4ce9-bd08-7915457ce92c', 'testcicerofolder']
 
