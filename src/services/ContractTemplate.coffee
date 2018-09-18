@@ -17,13 +17,7 @@ class ContractTemplate
   test: () -> 0
 
   template: (inputJsonFile, directory) =>
-    # @todo Read input json file
-    testLatePenaltyInput = {
-      "$class": "org.accordproject.helloworld.HelloWorldClause",
-      "name": "Philip",
-      "clauseId": "427c99b0-6df4-11e8-bb3b-67a2e79acc24"
-    }
-
+    testLatePenaltyInput = JSON.parse(fs.readFileSync(inputJsonFile, 'utf8'))
     template = await Template.fromDirectory(directory)
     clause = new Clause(template)
     clause.setData testLatePenaltyInput
