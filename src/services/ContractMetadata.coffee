@@ -33,6 +33,22 @@ class ContractMetadata
     n1 = clause.generateText()
     console.log n1
 
+  directoriesToJson: (directoryMetaData) =>
+    result = []
+    for d in directoryMetaData
+      ctoPaths = d.cto_paths
+      ctoPathsResult = []
+      for c in ctoPaths
+        console.log c
+        json = @ctoToJson c
+        ctoPathsResult.push
+          ctoPath: c
+          json: json
+      result.push
+        project_path: d.project_path
+        cto_paths: ctoPathsResult
+    return result
+
   # Finds all cto models
   # @todo Make more async
   iterateFoldersInDirectory: (directory) =>
@@ -43,10 +59,13 @@ class ContractMetadata
       files = find.fileSync d
       files.map (f) ->
         if f.toLowerCase().endsWith('.cto')
-          console.log f
-          result.push
-            project_path: d
-            cto_paths: f
+          c.push f
+
+      #console.log f
+      result.push
+        project_path: d
+        cto_paths: c
+
     return result
 
   # ?

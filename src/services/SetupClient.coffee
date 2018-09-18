@@ -58,7 +58,9 @@ class SetupClient
   extract: (directory, jsonFile) =>
     meta = new ContractMetadata()
     i = await meta.iterateFoldersInDirectory directory
-    console.log prettyjson.render(i)
+    c = await meta.directoriesToJson i
+    #console.log c
+    # structure of c is [project_path, cto_paths: [ctoPath, json]]
     console.log 'finished extract'
 
   # Submit test task to the server
