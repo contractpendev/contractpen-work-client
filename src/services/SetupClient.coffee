@@ -9,12 +9,17 @@ graphQlRequest = require 'graphql-request'
 program = require 'commander'
 path = require 'path'
 ClusterWS = require './../../node_modules/clusterws-client-js/dist/index.js'
-request = require('request')
+request = require 'request'
+uuidv1 = require 'uuid/v1'
 
 class SetupClient
 
   constructor: (opts) ->
     @g = opts.graph
+    @clientIdentity = opts.clientIdentity
+
+  getWorkerId: () =>
+    @clientIdentity
 
   setup: () ->
 
@@ -22,26 +27,29 @@ class SetupClient
 
     program.usage('testwork <server ip address> <server port>').command('testwork <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
       console.log 'send test work event'
-      await this.sendTestWorkEvent serverIp, serverPort
+      workerId = this.getWorkerId()
+      await this.sendTestWorkEvent workerId, serverIp, serverPort
 
     # Deploy a ContractPen contract to an Accord Project folder structure
     program.usage('deploy <guid> <dir>').command('deploy <guid> <dir>').action (guid, directoryToCreate, cmd) =>
       console.log 'deploying guid ' + guid
       console.log 'to directory ' + directoryToCreate
       contractJson = await this.fetchContractJsonFromServer guid
-      this.createProject directoryToCreate, contractJson
+      await this.createProject directoryToCreate, contractJson
 
     # Subscribe to server to await work events
     program.usage('subscribe <server ip address> <server port>').command('subscribe <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
       console.log 'subscribe, attempting to subscribe to server for work'
       console.log 'attempting ' + serverIp + ':' + serverPort
-      this.subscribeCluster serverIp, serverPort
+      await this.subscribeCluster serverIp, serverPort
 
     program.parse process.argv
 
   # Submit test task to the server
-  sendTestWorkEvent: (serverId, port) ->
+  sendTestWorkEvent: (workerId, serverId, port) ->
     workData =
+      uuid: uuidv1()
+      workerId: workerId
       command: 'deploy'
       params: ['b03d0879-1545-4ce9-bd08-7915457ce92c', 'testcicerofolder']
 
@@ -67,6 +75,9 @@ class SetupClient
 
     # Client must execute the job as given from the server and reply the result back to the server
     socket.on 'executeJob', (job) ->
+      if (job.command == 'deploy')
+        await this.createProject job.params[0], job.params[1]
+        socket.send 'finishedJob', 'jobid'
       console.log 'client executing job'
 
     # When the server is connected we send back to the server that we are ready to accept commands
@@ -89,7 +100,7 @@ class SetupClient
     socket.on 'disconnect', (code, reason) ->
       # your code to execute on disconnect event
       return
-
+    return
 
   doNothing: (error) -> 0
 

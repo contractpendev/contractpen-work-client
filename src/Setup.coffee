@@ -3,6 +3,15 @@ Comedy = require 'comedy'
 Awilix = require 'awilix'
 Winston = require 'winston'
 Graph = require '@dagrejs/graphlib'
+createIfNotExist = require 'create-if-not-exist'
+uuidv1 = require 'uuid/v1'
+fs = require('fs')
+
+clientIdentity =
+  uuid: uuidv1()
+createIfNotExist('./clientIdentity.json', JSON.stringify(clientIdentity))
+clientIdentity = JSON.parse(fs.readFileSync('./clientIdentity.json', 'utf8'))
+#console.log 'client identity is ' + clientIdentity.uuid
 
 graphClass = Graph.Graph
 graphInstance = new graphClass()
@@ -27,6 +36,7 @@ container.register
   actorSystem: Awilix.asValue actorSystem
   graphClass: Awilix.asClass graphClass
   graph: Awilix.asValue graphInstance
+  clientIdentity: Awilix.asValue clientIdentity
 
 opts = {}
 
