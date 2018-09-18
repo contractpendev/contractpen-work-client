@@ -12,6 +12,7 @@ ClusterWS = require './../../node_modules/clusterws-client-js/dist/index.js'
 request = require 'request'
 uuidv1 = require 'uuid/v1'
 ContractMetadata = require './ContractMetadata'
+prettyjson = require 'prettyjson'
 
 class SetupClient
 
@@ -57,11 +58,7 @@ class SetupClient
   extract: (directory, jsonFile) =>
     meta = new ContractMetadata()
     i = await meta.iterateFoldersInDirectory directory
-    console.log i
-    console.log i.length
-
-    console.log x.project_path for x in i
-
+    console.log prettyjson.render(i)
     console.log 'finished extract'
 
   # Submit test task to the server
