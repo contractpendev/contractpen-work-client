@@ -27,23 +27,26 @@ class SetupClient
 
     program.usage('testwork <server ip address> <server port>').command('testwork <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
       console.log 'send test work event'
-      workerId = this.getWorkerId()
-      await this.sendTestWorkEvent workerId, serverIp, serverPort
+      workerId = @getWorkerId()
+      await @sendTestWorkEvent workerId, serverIp, serverPort
 
     # Deploy a ContractPen contract to an Accord Project folder structure
     program.usage('deploy <guid> <dir>').command('deploy <guid> <dir>').action (guid, directoryToCreate, cmd) =>
       console.log 'deploying guid ' + guid
       console.log 'to directory ' + directoryToCreate
-      contractJson = await this.fetchContractJsonFromServer guid
-      await this.createProject directoryToCreate, contractJson
+      @deploy guid, directoryToCreate
 
     # Subscribe to server to await work events
     program.usage('subscribe <server ip address> <server port>').command('subscribe <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
       console.log 'subscribe, attempting to subscribe to server for work'
       console.log 'attempting ' + serverIp + ':' + serverPort
-      await this.subscribeCluster serverIp, serverPort
+      await @subscribeCluster serverIp, serverPort
 
     program.parse process.argv
+
+  deploy: (guid, directoryToCreate) =>
+    contractJson = await @fetchContractJsonFromServer guid
+    await @createProject directoryToCreate, contractJson
 
   # Submit test task to the server
   sendTestWorkEvent: (workerId, serverId, port) ->
@@ -70,13 +73,17 @@ class SetupClient
     #  console.log body
     #  return
 
-  subscribeCluster: (serverId, port) ->
+  subscribeCluster: (serverId, port) =>
     socket = new ClusterWS(url: 'ws://localhost:3050')
 
     # Client must execute the job as given from the server and reply the result back to the server
-    socket.on 'executeJob', (job) ->
+    socket.on 'executeJob', (job) =>
+      console.log 'execute job called from the server'
+      job = JSON.parse(job)
+
       if (job.command == 'deploy')
-        await this.createProject job.params[0], job.params[1]
+        console.log 'deploying contract ' + job.params[0] + ' ' + job.params[1]
+        @deploy job.params[0], job.params[1]
         socket.send 'finishedJob', 'jobid'
       console.log 'client executing job'
 
@@ -107,21 +114,21 @@ class SetupClient
   idName: (name) -> name.trim().split(' ').join('_').toLowerCase()
 
   # Executes all handlebars templates and places them in the destination directory
-  createProject: (dir, contract) ->
-    this.createDirectoryIfNotExist dir
-    this.createDirectoryIfNotExist dir + path.sep + 'grammar'
-    this.createDirectoryIfNotExist dir + path.sep + 'lib'
-    this.createDirectoryIfNotExist dir + path.sep + 'models'
-    this.createDirectoryIfNotExist dir + path.sep + 'test'
-    this.createFile dir + path.sep + 'package.json', this.template('package.json.hbs', {projectName: this.idName(contract.contract.name)})
-    this.createFile dir + path.sep + 'README.md', this.template('README.md.hbs', {})
-    this.createFile dir + path.sep + 'request.json', this.template('request.json.hbs', {})
-    this.createFile dir + path.sep + 'sample.txt', this.template('sample.txt.hbs', {})
-    this.createFile dir + path.sep + 'state.json', this.template('state.json.hbs', {})
-    this.createFile dir + path.sep + 'test' + path.sep + 'logic.js', this.template('logic.js.hbs', {})
-    this.createFile dir + path.sep + 'grammar' + path.sep + 'template.tem', this.template('template.tem.hbs', {})
-    this.createFile dir + path.sep + 'lib' + path.sep + 'logic.ergo', this.template('logic.ergo.hbs', {})
-    this.createFile dir + path.sep + 'models' + path.sep + 'model.cto', this.template('model.cto.hbs', {dataModels: contract.contract.dataModels})
+  createProject: (dir, contract) =>
+    @createDirectoryIfNotExist dir
+    @createDirectoryIfNotExist dir + path.sep + 'grammar'
+    @createDirectoryIfNotExist dir + path.sep + 'lib'
+    @createDirectoryIfNotExist dir + path.sep + 'models'
+    @createDirectoryIfNotExist dir + path.sep + 'test'
+    @createFile dir + path.sep + 'package.json', @template('package.json.hbs', {projectName: @idName(contract.contract.name)})
+    @createFile dir + path.sep + 'README.md', @template('README.md.hbs', {})
+    @createFile dir + path.sep + 'request.json', @template('request.json.hbs', {})
+    @createFile dir + path.sep + 'sample.txt', @template('sample.txt.hbs', {})
+    @createFile dir + path.sep + 'state.json', @template('state.json.hbs', {})
+    @createFile dir + path.sep + 'test' + path.sep + 'logic.js', @template('logic.js.hbs', {})
+    @createFile dir + path.sep + 'grammar' + path.sep + 'template.tem', @template('template.tem.hbs', {})
+    @createFile dir + path.sep + 'lib' + path.sep + 'logic.ergo', @template('logic.ergo.hbs', {})
+    @createFile dir + path.sep + 'models' + path.sep + 'model.cto', @template('model.cto.hbs', {dataModels: contract.contract.dataModels})
 
   # Executes the handlebars template with the data as given
   template: (file, data) ->
@@ -141,7 +148,7 @@ class SetupClient
     try
       fs.mkdirSync dir
     catch e
-      this.doNothing e
+      @doNothing e
 
   # Constructs a GraphlQL query and then executes that query on api.contractpen.com GraphQL API endpoint.
   # You may use this URL to test GraphQL queries http://api.contractpen.com/graphQl
