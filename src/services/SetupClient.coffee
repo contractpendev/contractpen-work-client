@@ -43,7 +43,8 @@ class SetupClient
     # ?
     program.usage('template <input json file> <directory of project>').command('template <input json file> <directory of project>').action (inputJsonFile, directory, cmd) =>
       console.log 'template ' + inputJsonFile + ' directory ' + directory
-      await @templateProcess inputJsonFile, null, directory
+      jsonData = JSON.parse(fs.readFileSync(inputJsonFile, 'utf8'))
+      await @templateProcess jsonData, null, directory
 
     # Deploy a ContractPen contract to an Accord Project folder structure
     program.usage('deploy <guid> <dir>').command('deploy <guid> <dir>').action (guid, directoryToCreate, cmd) =>
@@ -79,10 +80,10 @@ class SetupClient
     contractJson = await @fetchContractJsonFromServer guid
     await @createProject directoryToCreate, contractJson
 
-  templateProcess: (inputJsonFile, grammar, directory) =>
+  templateProcess: (jsonData, grammar, directory) =>
     #t = new ContractTemplate()
     t = @container.resolve "ContractTemplate"
-    await t.template(inputJsonFile, grammar, directory)
+    await t.template(jsonData, grammar, directory)
 
   extract: (directory, jsonFile, isMulti) =>
     meta = new ContractMetadata()
@@ -164,7 +165,7 @@ class SetupClient
     if (command == 'execute')
       result = @execute params[0], params[1], params[2], params[3]
     if (command == 'template')
-      result = await @templateProcess params[0], params[1], params[2]
+      result = await @templateProcess JSON.parse(params[0]), params[1], params[2] # @todo Should JSON.parse be here?
     if (command == 'export')
       result = @export params[0], params[1]
     if (command == 'exportmulti')
