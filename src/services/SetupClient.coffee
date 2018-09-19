@@ -34,7 +34,12 @@ class SetupClient
       workerId = @getWorkerId()
       await @sendTestWorkEvent workerId, serverIp, serverPort
 
-    # Deploy a ContractPen contract to an Accord Project folder structure
+    program.usage('testwork2 <server ip address> <server port>').command('testwork2 <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
+      console.log 'send test work event'
+      workerId = @getWorkerId()
+      await @sendTestWorkEvent2 workerId, serverIp, serverPort
+
+    # ?
     program.usage('template <input json file> <directory of project>').command('template <input json file> <directory of project>').action (inputJsonFile, directory, cmd) =>
       console.log 'template ' + inputJsonFile + ' directory ' + directory
       await @templateProcess inputJsonFile, directory
@@ -125,7 +130,25 @@ class SetupClient
       return
 
 
-    #request.post "http://#{serverId}:#{port}/api/submitTask", { json: true }, (err, res, body) ->
+  sendTestWorkEvent2: (workerId, serverId, port) ->
+    workData =
+      fromWorkerId: workerId
+      targetWorkerId: null
+      sendResultToWorkerId: null
+      command: 'template'
+      params: ['test_template.json', 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworld']
+
+    request.post {
+      url: "http://#{serverId}:#{port}/api/submitTask"
+      body: workData
+      json: true
+    }, (error, response, body) ->
+      if error
+        return console.error('failed to send work test event:', error)
+      console.log 'Upload successful!  Server responded with:', body
+      return
+
+#request.post "http://#{serverId}:#{port}/api/submitTask", { json: true }, (err, res, body) ->
     #  if err
     #    return console.log(err)
     #  console.log body
@@ -139,7 +162,7 @@ class SetupClient
     if (command == 'execute')
       result = @execute params[0], params[1], params[2], params[3]
     if (command == 'template')
-      result = @template params[0], params[1]
+      result = await @templateProcess params[0], params[1]
     if (command == 'export')
       result = @export params[0], params[1]
     if (command == 'exportmulti')
@@ -154,16 +177,27 @@ class SetupClient
       job = JSON.parse(job)
       console.log 'job command ' + job.command
       result = @commandSwitcher job.command, job.params
-      console.log 'execute job called from the server'
-      # If the directory exists then we say success
-      workerId = @getWorkerId()
-      socket.send 'finishedJob',
-        workerId: @getWorkerId()
-        job: job
-        result:
-          job: job
+      result.then (r) =>
+        console.log 'execute job called from the server and finished'
+        console.log r
+
+        # The result depends on the command
+        # deploy: If the folder exists
+        # execute: The result
+        # template: The result is the text of the template result
+        # export: The second parameter is the json file to return
+        # exportMulti: The second parameter is the json file to return
+
+        # If the directory exists then we say success
+        workerId = @getWorkerId()
+        socket.send 'finishedJob',
           workerId: @getWorkerId()
-          workerId: workerId
+          job: job
+          result:
+            job: job
+            workerId: @getWorkerId()
+            workerId: workerId
+            returnResultFromFunctionExecution: r
       return
 
     # When the server is connected we send back to the server that we are ready to accept commands

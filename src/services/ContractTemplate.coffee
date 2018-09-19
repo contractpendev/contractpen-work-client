@@ -22,7 +22,6 @@ class ContractTemplate
     clause = new Clause(template)
     clause.setData testLatePenaltyInput
     n1 = clause.generateText()
-    console.log n1
     n1
 
 module.exports = ContractTemplate
