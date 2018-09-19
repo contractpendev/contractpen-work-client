@@ -181,7 +181,6 @@ class SetupClient
       result = @commandSwitcher job.command, job.params
       result.then (r) =>
         console.log 'execute job called from the server and finished'
-        console.log r
 
         # The result depends on the command
         # deploy: If the folder exists
