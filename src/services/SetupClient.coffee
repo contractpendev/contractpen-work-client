@@ -131,6 +131,20 @@ class SetupClient
     #  console.log body
     #  return
 
+  commandSwitcher: (command, params) =>
+    result = null
+    if (command == 'deploy')
+      result = @deploy params[0], params[1]
+    if (command == 'execute')
+      result = @execute params[0], params[1], params[2], params[3]
+    if (command == 'template')
+      result = @template params[0], params[1]
+    if (command == 'export')
+      result = @export params[0], params[1]
+    if (command == 'exportmulti')
+      result = @export params[0], params[1]
+    result
+
   subscribeCluster: (serverId, port) =>
     socket = new ClusterWS(url: 'ws://localhost:3050')
 
@@ -138,25 +152,16 @@ class SetupClient
     socket.on 'executeJob', (job) =>
       console.log 'execute job called from the server'
       job = JSON.parse(job)
-
-      if (job.command == 'deploy')
-        console.log 'deploying contract ' + job.params[0] + ' ' + job.params[1]
-        result = @deploy job.params[0], job.params[1]
-        # If the directory exists then we say success
-        success = false
-        if fs.existsSync(job.params[1])
-          success = true
-        workerId = @getWorkerId()
-        socket.send 'finishedJob',
-          workerId: @getWorkerId()
+      result = @commandSwitcher job.command, job.params
+      # If the directory exists then we say success
+      workerId = @getWorkerId()
+      socket.send 'finishedJob',
+        workerId: @getWorkerId()
+        job: job
+        result:
           job: job
-          result:
-            job: job
-            workerId: @getWorkerId()
-            deployedContractPenId: job.params[0]
-            deployedContractPenAtPath: job.params[1]
-            success: success
-            workerId: workerId
+          workerId: @getWorkerId()
+          workerId: workerId
       return
 
     # When the server is connected we send back to the server that we are ready to accept commands
