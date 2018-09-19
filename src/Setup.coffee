@@ -9,8 +9,8 @@ fs = require('fs')
 
 clientIdentity =
   uuid: uuidv1()
-createIfNotExist('./clientIdentity.json', JSON.stringify(clientIdentity))
-clientIdentity = JSON.parse(fs.readFileSync('./clientIdentity.json', 'utf8'))
+#createIfNotExist('./clientIdentity.json', JSON.stringify(clientIdentity))
+#clientIdentity = JSON.parse(fs.readFileSync('./clientIdentity.json', 'utf8'))
 #console.log 'client identity is ' + clientIdentity.uuid
 
 graphClass = Graph.Graph
