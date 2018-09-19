@@ -165,7 +165,14 @@ class SetupClient
     if (command == 'execute')
       result = @execute params[0], params[1], params[2], params[3]
     if (command == 'template')
-      result = await @templateProcess JSON.parse(params[0]), params[1], params[2] # @todo Should JSON.parse be here?
+      console.log ''
+      console.log ''
+      console.log ''
+      console.log 'at template'
+      console.log params[0]
+      console.log JSON.parse(params[0])
+      j = JSON.parse(params[0])
+      result = await @templateProcess j, params[1], params[2] # @todo Should JSON.parse be here?
     if (command == 'export')
       result = @export params[0], params[1]
     if (command == 'exportmulti')
