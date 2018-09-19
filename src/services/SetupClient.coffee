@@ -132,6 +132,7 @@ class SetupClient
     #  return
 
   commandSwitcher: (command, params) =>
+    console.log 'commandSwitcher'
     result = null
     if (command == 'deploy')
       result = @deploy params[0], params[1]
@@ -150,9 +151,10 @@ class SetupClient
 
     # Client must execute the job as given from the server and reply the result back to the server
     socket.on 'executeJob', (job) =>
-      console.log 'execute job called from the server'
       job = JSON.parse(job)
+      console.log 'job command ' + job.command
       result = @commandSwitcher job.command, job.params
+      console.log 'execute job called from the server'
       # If the directory exists then we say success
       workerId = @getWorkerId()
       socket.send 'finishedJob',
