@@ -193,11 +193,10 @@ class SetupClient
         # If the directory exists then we say success
         workerId = @getWorkerId()
         socket.send 'finishedJob',
-          workerId: @getWorkerId()
+          workerId: workerId
           job: job
           result:
             job: job
-            workerId: @getWorkerId()
             workerId: workerId
             returnResultFromFunctionExecution: r
       return
