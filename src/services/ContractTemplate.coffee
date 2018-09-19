@@ -17,9 +17,10 @@ class ContractTemplate
 
   test: () -> 0
 
-  template: (inputJsonFile, directory) =>
+  template: (inputJsonFile, grammar, directory) =>
     testLatePenaltyInput = JSON.parse(fs.readFileSync(inputJsonFile, 'utf8'))
     template = await Template.fromDirectory(directory)
+    template.buildGrammar(grammar) if grammar
     clause = new Clause(template)
     clause.setData testLatePenaltyInput
     n1 = clause.generateText()

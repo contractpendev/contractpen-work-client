@@ -43,7 +43,7 @@ class SetupClient
     # ?
     program.usage('template <input json file> <directory of project>').command('template <input json file> <directory of project>').action (inputJsonFile, directory, cmd) =>
       console.log 'template ' + inputJsonFile + ' directory ' + directory
-      await @templateProcess inputJsonFile, directory
+      await @templateProcess inputJsonFile, null, directory
 
     # Deploy a ContractPen contract to an Accord Project folder structure
     program.usage('deploy <guid> <dir>').command('deploy <guid> <dir>').action (guid, directoryToCreate, cmd) =>
@@ -79,10 +79,10 @@ class SetupClient
     contractJson = await @fetchContractJsonFromServer guid
     await @createProject directoryToCreate, contractJson
 
-  templateProcess: (inputJsonFile, directory) =>
+  templateProcess: (inputJsonFile, grammar, directory) =>
     #t = new ContractTemplate()
     t = @container.resolve "ContractTemplate"
-    await t.template(inputJsonFile, directory)
+    await t.template(inputJsonFile, grammar, directory)
 
   extract: (directory, jsonFile, isMulti) =>
     meta = new ContractMetadata()
@@ -164,7 +164,7 @@ class SetupClient
     if (command == 'execute')
       result = @execute params[0], params[1], params[2], params[3]
     if (command == 'template')
-      result = await @templateProcess params[0], params[1]
+      result = await @templateProcess params[0], params[1], params[2]
     if (command == 'export')
       result = @export params[0], params[1]
     if (command == 'exportmulti')
@@ -284,7 +284,8 @@ class SetupClient
       }
     }
     """
-    await graphQlRequest.request 'http://api.contractpen.com/graphQl', query
+    # http://api.contractpen.com/graphQl
+    await graphQlRequest.request 'http://localhost:4000/graphQl', query
 
 module.exports = SetupClient
 
