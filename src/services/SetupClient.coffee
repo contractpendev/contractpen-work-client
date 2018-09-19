@@ -56,9 +56,9 @@ class SetupClient
       json = await @extract directory, jsonFile, true
       @createFile jsonFile, JSON.stringify(json)
 
-    program.usage('execute <dir>').command('execute <dir>').action (directory, cmd) =>
+    program.usage('execute <dir> <sample txt file> <request file> <state file>').command('execute <dir> <sample txt file> <request path> <state path>').action (directory, sampleTxtFile, requestFile, stateFile, cmd) =>
       console.log 'execute cicero'
-      result = await @execute directory
+      result = await @execute directory, sampleTxtFile, requestFile, stateFile
       console.log result
 
     # Subscribe to server to await work events
@@ -95,12 +95,13 @@ class SetupClient
     # structure of c is [project_path, cto_paths: [ctoPath, json]]
     #console.log 'finished extract'
 
-  execute: (directory) =>
+  #templatePath = 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate'
+  #samplePath = 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\sample.txt'
+  #requestsPath = ['C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\request.json']
+  #statePath = 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\state.json'
+  execute: (templatePath, samplePath, requestPath, statePath) =>
     console.log 'try execute'
-    templatePath = 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate'
-    samplePath = 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\sample.txt'
-    requestsPath = ['C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\request.json']
-    statePath = 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\state.json'
+    requestsPath = [requestPath]
     exec = new ContractExecution()
     exec.execute(templatePath, samplePath, requestsPath, statePath)
 
