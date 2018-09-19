@@ -6,6 +6,9 @@ Graph = require '@dagrejs/graphlib'
 createIfNotExist = require 'create-if-not-exist'
 uuidv1 = require 'uuid/v1'
 fs = require('fs')
+NodeCache = require( "node-cache" )
+
+nodeCache = new NodeCache()
 
 clientIdentity =
   uuid: uuidv1()
@@ -31,12 +34,17 @@ actorSystem.getLog().setLevel(0) # Prevent output of log at startup
 container = Awilix.createContainer
   injectionMode: Awilix.InjectionMode.PROXY
 
+myCache = {}
+
 container.register
+  container: Awilix.asValue container
   logger: Awilix.asValue logger
   actorSystem: Awilix.asValue actorSystem
   graphClass: Awilix.asClass graphClass
   graph: Awilix.asValue graphInstance
   clientIdentity: Awilix.asValue clientIdentity
+  nodeCache: Awilix.asValue nodeCache
+  myCache: Awilix.asValue myCache
 
 opts = {}
 

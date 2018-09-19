@@ -21,6 +21,7 @@ class SetupClient
   constructor: (opts) ->
     @g = opts.graph
     @clientIdentity = opts.clientIdentity.uuid
+    @container = opts.container
 
   getWorkerId: () =>
     @clientIdentity
@@ -79,7 +80,8 @@ class SetupClient
     await @createProject directoryToCreate, contractJson
 
   templateProcess: (inputJsonFile, directory) =>
-    t = new ContractTemplate()
+    #t = new ContractTemplate()
+    t = @container.resolve "ContractTemplate"
     await t.template(inputJsonFile, directory)
 
   extract: (directory, jsonFile, isMulti) =>

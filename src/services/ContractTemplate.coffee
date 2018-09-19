@@ -12,7 +12,8 @@ find = require 'find'
 
 class ContractTemplate
 
-  constructor: () -> 0
+  constructor: (opts) ->
+    @nodeCache = opts.nodeCache
 
   test: () -> 0
 
