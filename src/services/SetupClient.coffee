@@ -15,6 +15,7 @@ ContractMetadata = require './ContractMetadata'
 ContractExecution = require './ContractExecution'
 ContractTemplate = require './ContractTemplate'
 prettyjson = require 'prettyjson'
+zipIt = require('zip-a-folder')
 
 class SetupClient
 
@@ -22,6 +23,7 @@ class SetupClient
     @g = opts.graph
     @clientIdentity = opts.clientIdentity.uuid
     @container = opts.container
+    @baseTemplateDirectory = opts.baseTemplateDirectory
 
   getWorkerId: () =>
     @clientIdentity
@@ -68,6 +70,10 @@ class SetupClient
       result = await @execute directory, sampleTxtFile, requestFile, stateFile
       console.log result
 
+    program.usage('zip <folder>').command('zip <folder>').action (folder, cmd) =>
+      console.log 'zip folder ' + folder
+      @zipFolder folder
+
     # Subscribe to server to await work events
     program.usage('subscribe <server ip address> <server port>').command('subscribe <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
       console.log 'subscribe, attempting to subscribe to server for work'
@@ -77,13 +83,14 @@ class SetupClient
     program.parse process.argv
 
   deploy: (guid, directoryToCreate) =>
+    dir = @baseTemplateDirectory + directoryToCreate
     contractJson = await @fetchContractJsonFromServer guid
-    await @createProject directoryToCreate, contractJson
+    await @createProject dir, contractJson
 
   templateProcess: (jsonData, grammar, directory) =>
-    #t = new ContractTemplate()
     t = @container.resolve "ContractTemplate"
-    await t.template(jsonData, grammar, directory)
+    dir = @baseTemplateDirectory + directory
+    await t.template(jsonData, grammar, dir)
 
   extract: (directory, jsonFile, isMulti) =>
     meta = new ContractMetadata()
@@ -177,7 +184,15 @@ class SetupClient
       result = @export params[0], params[1]
     if (command == 'exportmulti')
       result = @export params[0], params[1]
+    if (command == 'zip')
+      result = @zipFolder params[0]
     result
+
+  zipFolder: (folder) =>
+    base = @baseTemplateDirectory
+    f = base + folder
+    a = base + folder + '.zip'
+    await zipIt.zip(f, a)
 
   subscribeCluster: (serverId, port) =>
     socket = new ClusterWS(url: 'ws://localhost:3050')
@@ -236,6 +251,8 @@ class SetupClient
 
   # Executes all handlebars templates and places them in the destination directory
   createProject: (dir, contract) =>
+    console.log 'create project'
+    console.log dir
     @createDirectoryIfNotExist dir
     @createDirectoryIfNotExist dir + path.sep + 'grammar'
     @createDirectoryIfNotExist dir + path.sep + 'lib'
