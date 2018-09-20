@@ -18,12 +18,17 @@ class ContractTemplate
   test: () -> 0
 
   template: (jsonData, grammar, directory) =>
-    template = await Template.fromDirectory(directory)
-    template.buildGrammar(grammar) if grammar
-    clause = new Clause(template)
-    clause.setData jsonData
-    n1 = clause.generateText()
-    console.log n1
-    n1
+    nl = ''
+    try
+      template = await Template.fromDirectory(directory)
+      template.buildGrammar(grammar) if grammar
+      clause = new Clause(template)
+      clause.setData jsonData
+      n1 = clause.generateText()
+      console.log n1
+      n1
+    catch error
+      console.log error
+      nl
 
 module.exports = ContractTemplate
