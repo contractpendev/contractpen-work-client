@@ -45,7 +45,7 @@ container.register
   clientIdentity: Awilix.asValue clientIdentity
   nodeCache: Awilix.asValue nodeCache
   myCache: Awilix.asValue myCache
-  baseTemplateDirectory: Awilix.asValue 'C:\\home\\projects\\contractpen_node_client\\templates\\'
+  baseTemplateDirectory: Awilix.asValue '/root/template/'
 
 opts = {}
 
