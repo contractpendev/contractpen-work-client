@@ -12,9 +12,6 @@ nodeCache = new NodeCache()
 
 clientIdentity =
   uuid: uuidv1()
-#createIfNotExist('./clientIdentity.json', JSON.stringify(clientIdentity))
-#clientIdentity = JSON.parse(fs.readFileSync('./clientIdentity.json', 'utf8'))
-#console.log 'client identity is ' + clientIdentity.uuid
 
 graphClass = Graph.Graph
 graphInstance = new graphClass()
@@ -36,6 +33,7 @@ container = Awilix.createContainer
 
 myCache = {}
 
+# Register the dependency injection
 container.register
   container: Awilix.asValue container
   logger: Awilix.asValue logger
