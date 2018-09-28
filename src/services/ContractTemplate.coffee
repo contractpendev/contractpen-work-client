@@ -9,6 +9,7 @@ Commands = require('@accordproject/cicero-cli/lib/commands')
 Engine = require('@accordproject/cicero-engine').Engine
 Ergo = require('@accordproject/ergo-compiler/lib/ergo')
 find = require 'find'
+util = require('util')
 
 class ContractTemplate
 
@@ -18,17 +19,13 @@ class ContractTemplate
   test: () -> 0
 
   template: (jsonData, grammar, directory) =>
-    nl = ''
-    try
-      template = await Template.fromDirectory(directory)
-      template.buildGrammar(grammar) if grammar
-      clause = new Clause(template)
-      clause.setData jsonData
-      n1 = clause.generateText()
-      console.log n1
-      n1
-    catch error
-      console.log error
-      nl
+    await Template.fromDirectory(directory)
+      .then((template) =>
+        template.buildGrammar(grammar) if grammar
+        clause = new Clause(template)
+        clause.setData jsonData
+        clause.generateText())
+      .catch((err) =>
+        console.error(util.format('Failed creating template from directory: %s' + err)))
 
 module.exports = ContractTemplate

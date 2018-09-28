@@ -16,6 +16,7 @@ ContractExecution = require './ContractExecution'
 ContractTemplate = require './ContractTemplate'
 prettyjson = require 'prettyjson'
 zipIt = require('zip-a-folder')
+util = require('util')
 
 class SetupClient
 
@@ -42,11 +43,10 @@ class SetupClient
       workerId = @getWorkerId()
       await @sendTestWorkEvent2 workerId, serverIp, serverPort
 
-    # ?
+    # Generate text given clause data and a Cicero template directory
     program.usage('template <input json file> <directory of project>').command('template <input json file> <directory of project>').action (inputJsonFile, directory, cmd) =>
       console.log 'template ' + inputJsonFile + ' directory ' + directory
-      jsonData = JSON.parse(fs.readFileSync(inputJsonFile, 'utf8'))
-      await @templateProcess jsonData, null, directory
+      await @templateProcess inputJsonFile, null, directory
 
     # Deploy a ContractPen contract to an Accord Project folder structure
     program.usage('deploy <guid> <dir>').command('deploy <guid> <dir>').action (guid, directoryToCreate, cmd) =>
@@ -87,10 +87,33 @@ class SetupClient
     contractJson = await @fetchContractJsonFromServer guid
     await @createProject dir, contractJson
 
-  templateProcess: (jsonData, grammar, directory) =>
-    t = @container.resolve "ContractTemplate"
-    dir = @baseTemplateDirectory + directory
-    await t.template(jsonData, grammar, dir)
+  clauseProcess: (fileName) =>
+    console.debug(util.format('Attempting to process %s', fileName))
+    new Promise (resolve, reject) ->
+      fs.readFile fileName, 'utf8', (err, data) ->
+        if err
+          reject(new Error(util.format('Failed reading %s: %s', fileName, err)))
+        else
+          try
+            clause = JSON.parse(data)
+            console.debug(util.format('Read and parsed a %s from %s', clause.$class, fileName))
+            resolve(clause)
+          catch err
+            reject(new Error(util.format('Failed parsing clause from %s: %s', fileName, err)))
+
+  templateProcess: (fileName, grammar, directory) =>
+    # Read a Clause from the provided file...
+    await @clauseProcess(fileName)
+      .then((clauseJson) =>
+        dir = @baseTemplateDirectory + directory
+        t = @container.resolve "ContractTemplate"
+        # ...generate the clause's text...
+        t.template(clauseJson, grammar, dir)
+          .then((clauseText) =>
+            # ...and print out the text to the console.
+            console.info(clauseText))
+          .catch((err) => console.error(err)))
+      .catch((err) => console.error(err))
 
   extract: (directory, jsonFile, isMulti) =>
     meta = new ContractMetadata()
