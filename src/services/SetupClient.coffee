@@ -16,6 +16,7 @@ ContractExecution = require './ContractExecution'
 ContractTemplate = require './ContractTemplate'
 prettyjson = require 'prettyjson'
 zipIt = require('zip-a-folder')
+read = require('fs-readdir-recursive')
 
 class SetupClient
 
@@ -73,6 +74,9 @@ class SetupClient
     program.usage('zip <folder>').command('zip <folder>').action (folder, cmd) =>
       console.log 'zip folder ' + folder
       @zipFolder folder
+
+    program.usage('directorytree <folder>').command('directorytree <folder>').action (folder, cmd) =>
+      @directoryTree folder
 
     # Subscribe to server to await work events
     program.usage('subscribe <server ip address> <server port>').command('subscribe <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
@@ -186,7 +190,17 @@ class SetupClient
       result = @export params[0], params[1]
     if (command == 'zip')
       result = @zipFolder params[0]
+    if (command == 'directorytree')
+      result = @directoryTree params[0]
     result
+
+  directoryTree: (folder) =>
+    base = @baseTemplateDirectory
+    f = base + folder
+    dir = read(f)
+    console.log 'directory tree is:'
+    console.log dir
+    dir
 
   zipFolder: (folder) =>
     base = @baseTemplateDirectory
@@ -211,6 +225,7 @@ class SetupClient
         # template: The result is the text of the template result
         # export: The second parameter is the json file to return
         # exportMulti: The second parameter is the json file to return
+        # directoryTree: Lists the directory tree under the path
 
         # If the directory exists then we say success
         workerId = @getWorkerId()

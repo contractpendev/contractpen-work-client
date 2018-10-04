@@ -7,6 +7,13 @@ createIfNotExist = require 'create-if-not-exist'
 uuidv1 = require 'uuid/v1'
 fs = require('fs')
 NodeCache = require( "node-cache" )
+os = require('os')
+
+baseTemplateDirectory = ''
+if os.type() is 'Windows_NT'
+  baseTemplateDirectory = '\\home\\projects\\contractpen_node_client\\templates\\'
+else
+  baseTemplateDirectory = '/root/template/'
 
 nodeCache = new NodeCache()
 
@@ -43,7 +50,7 @@ container.register
   clientIdentity: Awilix.asValue clientIdentity
   nodeCache: Awilix.asValue nodeCache
   myCache: Awilix.asValue myCache
-  baseTemplateDirectory: Awilix.asValue '/root/template/'
+  baseTemplateDirectory: Awilix.asValue baseTemplateDirectory
 
 opts = {}
 
