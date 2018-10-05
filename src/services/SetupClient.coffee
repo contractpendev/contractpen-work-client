@@ -209,6 +209,8 @@ class SetupClient
       result = @directoryTree params[0]
     if (command == 'filecontents')
       result = @fileContents params[0]
+    console.log 'result back'
+    console.log result
     result
 
   directoryTree: (folder) =>
@@ -251,7 +253,8 @@ class SetupClient
       console.log 'job command ' + job.command
       result = @commandSwitcher job.command, job.params
       result.then (r) =>
-        console.log 'execute job called from the server and finished'
+        console.log 'Promise finished and result is'
+        console.log r
 
         # The result depends on the command
         # deploy: If the folder exists
