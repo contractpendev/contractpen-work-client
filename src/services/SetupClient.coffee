@@ -78,6 +78,9 @@ class SetupClient
     program.usage('directorytree <folder>').command('directorytree <folder>').action (folder, cmd) =>
       @directoryTree folder
 
+    program.usage('filecontents <path>').command('filecontents <path>').action (path, cmd) =>
+      @fileContents path
+
     # Subscribe to server to await work events
     program.usage('subscribe <server ip address> <server port>').command('subscribe <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
       console.log 'subscribe, attempting to subscribe to server for work'
@@ -92,20 +95,26 @@ class SetupClient
     await @createProject dir, contractJson
 
   templateProcess: (jsonData, grammar, directory) =>
-    t = @container.resolve "ContractTemplate"
-    dir = @baseTemplateDirectory + directory
-    await t.template(jsonData, grammar, dir)
+    try
+      t = @container.resolve "ContractTemplate"
+      dir = @baseTemplateDirectory + directory
+      await t.template(jsonData, grammar, dir)
+    catch e
+      ''
 
   extract: (directory, jsonFile, isMulti) =>
-    meta = new ContractMetadata()
-    if isMulti
-      i = await meta.iterateFoldersInDirectory directory
-    else
-      i = await meta.singleDirectory directory
+    try
+      meta = new ContractMetadata()
+      if isMulti
+        i = await meta.iterateFoldersInDirectory directory
+      else
+        i = await meta.singleDirectory directory
 
-    c = await meta.directoriesToJson i
-    m = await meta.metaDataOfDirectoriesJson c
-    m
+      c = await meta.directoriesToJson i
+      m = await meta.metaDataOfDirectoriesJson c
+      m
+    catch e
+      ''
 
     #m = await meta.metaDataOfProject 'C:\\home\\projects\\accord\\cicero-template-library\\src\\fragile-goods'
     #console.log m
@@ -119,10 +128,13 @@ class SetupClient
   #requestsPath = ['C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\request.json']
   #statePath = 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\state.json'
   execute: (templatePath, samplePath, requestPath, statePath) =>
-    console.log 'try execute'
-    requestsPath = [requestPath]
-    exec = new ContractExecution()
-    exec.execute(templatePath, samplePath, requestsPath, statePath)
+    try
+      console.log 'try execute'
+      requestsPath = [requestPath]
+      exec = new ContractExecution()
+      exec.execute(templatePath, samplePath, requestsPath, statePath)
+    catch e
+      ''
 
   # Submit test task to the server
   sendTestWorkEvent: (workerId, serverId, port) ->
@@ -192,21 +204,40 @@ class SetupClient
       result = @zipFolder params[0]
     if (command == 'directorytree')
       result = @directoryTree params[0]
+    if (command == 'filecontents')
+      result = @fileContents params[0]
     result
 
   directoryTree: (folder) =>
-    base = @baseTemplateDirectory
-    f = base + folder
-    dir = read(f)
-    console.log 'directory tree is:'
-    console.log dir
-    dir
+    try
+      base = @baseTemplateDirectory
+      f = base + folder
+      dir = read(f)
+      dirFixed = dir.map (m) -> m.replace(/\\/, "/")
+      console.log 'directory tree is:'
+      console.log dirFixed
+      dirFixed
+    catch e
+      []
+
+  fileContents: (path) =>
+    try
+      console.log 'file contents start'
+      base = @baseTemplateDirectory
+      file = fs.readFileSync(base + path, 'utf8')
+      console.log 'file contents'
+      file
+    catch ex
+      ''
 
   zipFolder: (folder) =>
-    base = @baseTemplateDirectory
-    f = base + folder
-    a = base + folder + '.zip'
-    await zipIt.zip(f, a)
+    try
+      base = @baseTemplateDirectory
+      f = base + folder
+      a = base + folder + '.zip'
+      await zipIt.zip(f, a)
+    catch e
+      null
 
   subscribeCluster: (serverId, port) =>
     socket = new ClusterWS(url: 'ws://localhost:3050')
@@ -266,36 +297,45 @@ class SetupClient
 
   # Executes all handlebars templates and places them in the destination directory
   createProject: (dir, contract) =>
-    console.log 'create project'
-    console.log dir
-    @createDirectoryIfNotExist dir
-    @createDirectoryIfNotExist dir + path.sep + 'grammar'
-    @createDirectoryIfNotExist dir + path.sep + 'lib'
-    @createDirectoryIfNotExist dir + path.sep + 'models'
-    @createDirectoryIfNotExist dir + path.sep + 'test'
-    @createFile dir + path.sep + 'package.json', @template('package.json.hbs', {projectName: @idName(contract.contract.name)})
-    @createFile dir + path.sep + 'README.md', @template('README.md.hbs', {})
-    @createFile dir + path.sep + 'request.json', @template('request.json.hbs', {})
-    @createFile dir + path.sep + 'sample.txt', @template('sample.txt.hbs', {})
-    @createFile dir + path.sep + 'state.json', @template('state.json.hbs', {})
-    @createFile dir + path.sep + 'test' + path.sep + 'logic.js', @template('logic.js.hbs', {})
-    @createFile dir + path.sep + 'grammar' + path.sep + 'template.tem', @template('template.tem.hbs', {})
-    @createFile dir + path.sep + 'lib' + path.sep + 'logic.ergo', @template('logic.ergo.hbs', {})
-    @createFile dir + path.sep + 'models' + path.sep + 'model.cto', @template('model.cto.hbs', {dataModels: contract.contract.dataModels})
+    try
+      console.log 'create project'
+      console.log dir
+      @createDirectoryIfNotExist dir
+      @createDirectoryIfNotExist dir + path.sep + 'grammar'
+      @createDirectoryIfNotExist dir + path.sep + 'lib'
+      @createDirectoryIfNotExist dir + path.sep + 'models'
+      @createDirectoryIfNotExist dir + path.sep + 'test'
+      @createFile dir + path.sep + 'package.json', @template('package.json.hbs', {projectName: @idName(contract.contract.name)})
+      @createFile dir + path.sep + 'README.md', @template('README.md.hbs', {})
+      @createFile dir + path.sep + 'request.json', @template('request.json.hbs', {})
+      @createFile dir + path.sep + 'sample.txt', @template('sample.txt.hbs', {})
+      @createFile dir + path.sep + 'state.json', @template('state.json.hbs', {})
+      @createFile dir + path.sep + 'test' + path.sep + 'logic.js', @template('logic.js.hbs', {})
+      @createFile dir + path.sep + 'grammar' + path.sep + 'template.tem', @template('template.tem.hbs', {})
+      @createFile dir + path.sep + 'lib' + path.sep + 'logic.ergo', @template('logic.ergo.hbs', {})
+      @createFile dir + path.sep + 'models' + path.sep + 'model.cto', @template('model.cto.hbs', {dataModels: contract.contract.dataModels})
+    catch e
+      e
 
   # Executes the handlebars template with the data as given
   template: (file, data) ->
-    root = path.dirname(require.main.filename)
-    file = fs.readFileSync(root + path.sep + 'handlebars' + path.sep + file, 'utf8')
-    template = Handlebars.compile(file)
-    result = template({data: data}) # result = template({data: d})
-    result
+    try
+      root = path.dirname(require.main.filename)
+      file = fs.readFileSync(root + path.sep + 'handlebars' + path.sep + file, 'utf8')
+      template = Handlebars.compile(file)
+      result = template({data: data}) # result = template({data: d})
+      result
+    catch e
+      ''
 
   # Creates a file with this contents, the string template
   createFile: (file, template) ->
-    fs.writeFileSync file, template,
-      encoding: 'utf8'
-      flag: 'w'
+    try
+      fs.writeFileSync file, template,
+        encoding: 'utf8'
+        flag: 'w'
+    catch e
+      null
 
   createDirectoryIfNotExist: (dir) ->
     try
