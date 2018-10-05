@@ -129,10 +129,13 @@ class SetupClient
   #statePath = 'C:\\home\\projects\\accord\\cicero-template-library\\src\\helloworldstate\\state.json'
   execute: (templatePath, samplePath, requestPath, statePath) =>
     try
-      console.log 'try execute'
-      requestsPath = [requestPath]
+      console.log 'try execute!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+      console.log templatePath
+      console.log samplePath
+      console.log requestPath
+      console.log statePath
       exec = new ContractExecution()
-      exec.execute(templatePath, samplePath, requestsPath, statePath)
+      exec.execute(templatePath, samplePath, requestPath, statePath)
     catch e
       ''
 
