@@ -6,7 +6,7 @@ namespace {{ciceroNameSpace}}
 
 {{lowercase ciceroAssetOrTransaction}} {{ciceroClassName}} extends {{ciceroExtendsClass}} {
 {{#each fields}}
-    o {{dataType}} {{fieldName}}
+    o {{dataType}} {{camelcase fieldName}}
 {{/each}}
 }
 {{/each}}
