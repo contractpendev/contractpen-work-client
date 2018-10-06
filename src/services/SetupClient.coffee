@@ -71,6 +71,11 @@ class SetupClient
       result = await @execute directory, sampleTxtFile, requestFile, stateFile
       console.log result
 
+    program.usage('execute2 <folder>').command('execute2 <folder>').action (folder) =>
+      console.log 'execute2 cicero'
+      result = await @execute2 folder
+      console.log result
+
     program.usage('zip <folder>').command('zip <folder>').action (folder, cmd) =>
       console.log 'zip folder ' + folder
       @zipFolder folder
@@ -139,6 +144,24 @@ class SetupClient
     catch e
       ''
 
+  execute2: (folder) =>
+    try
+      base = @baseTemplateDirectory
+      f = base + folder
+      templatePath = f
+      samplePath = f + path.sep + 'sample.txt'
+      requestPath = [f + path.sep + 'request.json']
+      statePath = f + path.sep + 'state.json'
+      console.log 'try execute2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+      console.log templatePath
+      console.log samplePath
+      console.log requestPath
+      console.log statePath
+      exec = new ContractExecution()
+      exec.execute(templatePath, samplePath, requestPath, statePath)
+    catch e
+      ''
+
   # Submit test task to the server
   sendTestWorkEvent: (workerId, serverId, port) ->
     workData =
@@ -190,6 +213,8 @@ class SetupClient
       result = @deploy params[0], params[1]
     if (command == 'execute')
       result = @execute params[0], params[1], params[2], params[3]
+    if (command == 'execute2')
+      result = @execute2 params[0]
     if (command == 'template')
       console.log ''
       console.log ''
