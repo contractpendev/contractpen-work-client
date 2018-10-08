@@ -86,6 +86,9 @@ class SetupClient
     program.usage('filecontents <path>').command('filecontents <path>').action (path, cmd) =>
       @fileContents path
 
+    program.usage('cicerotemplates <path>').command('cicerotemplates <path>').action (path, cmd) =>
+      @ciceroTemplates path
+
     # Subscribe to server to await work events
     program.usage('subscribe <server ip address> <server port>').command('subscribe <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
       console.log 'subscribe, attempting to subscribe to server for work'
@@ -234,6 +237,8 @@ class SetupClient
       result = @directoryTree params[0]
     if (command == 'filecontents')
       result = @fileContents params[0]
+    if (command == 'cicerotemplates')
+      result = @ciceroTemplates params[0]
     console.log 'result back'
     console.log result
     result
@@ -258,6 +263,41 @@ class SetupClient
       console.log 'file contents'
       file
     catch ex
+      ''
+
+  ciceroTemplates: (directoryPath) =>
+    try
+      console.log 'getting cicero template information'
+      base = @baseTemplateDirectory
+
+      # 1. Get all folders in C:\home\projects\accord\cicero-template-library\src
+      dir = '/home/projects/accord/cicero-template-library/src'
+      test = fs.readdirSync(dir, 'utf8')
+      directories = []
+
+      # 2. Read each README.md inside each folder
+      for d in test
+        dirToTest = dir + path.sep + d
+        stat = fs.lstatSync(dirToTest)
+        if stat.isDirectory()
+          directories.push dirToTest
+
+      readmes = directories.map (d) =>
+        mydir = d + path.sep + 'package.json'
+        fileContents = ''
+        if fs.existsSync(mydir) then fileContents = fs.readFileSync(mydir, 'utf8')
+        name = ''
+        description = ''
+        if fileContents.length > 0
+          name = JSON.parse(fileContents).name
+          description = JSON.parse(fileContents).description
+        [mydir, name, description]
+
+      # 3. Compose data to return and return back to caller
+      readmesWithoutEmpty = readmes.filter (d) => d[1].length > 0
+      readmesWithoutEmpty
+    catch ex
+      console.log ex
       ''
 
   zipFolder: (folder) =>
