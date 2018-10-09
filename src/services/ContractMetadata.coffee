@@ -36,6 +36,8 @@ class ContractMetadata
     console.log n1
 
   directoriesToJson: (directoryMetaData) =>
+    console.log 'directoriesToJson:'
+    console.log directoryMetaData
     result = []
     for d in directoryMetaData
       ctoPaths = d.cto_paths
@@ -53,6 +55,7 @@ class ContractMetadata
 
   # @todo Deduplicate method singleDirectory and iterateFoldersInDirectory
   singleDirectory: (directory) =>
+    console.log 'singleDirectory in ContractMetadata as ' + directory
     dir = [directory]
     result = []
     dir.map (d) ->
@@ -91,6 +94,7 @@ class ContractMetadata
   metaDataOfDirectoriesJson: (d) =>
     result = []
     for x in d
+      console.log 'project path: ' + x.project_path
       meta = await @metaDataOfProject x.project_path
       console.log 'done'
       result.push
@@ -101,6 +105,7 @@ class ContractMetadata
 
   metaDataOfProject: (projectDirectory) =>
     try
+      console.log projectDirectory
       template = await Template.fromDirectory projectDirectory
       hash = template.getHash()
       identifier = template.getIdentifier()

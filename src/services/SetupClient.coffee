@@ -112,6 +112,7 @@ class SetupClient
 
   extract: (directory, jsonFile, isMulti) =>
     try
+      console.log 'extract! with directory ' + directory
       meta = new ContractMetadata()
       if isMulti
         i = await meta.iterateFoldersInDirectory directory
@@ -122,6 +123,7 @@ class SetupClient
       m = await meta.metaDataOfDirectoriesJson c
       m
     catch e
+      console.log e
       ''
 
     #m = await meta.metaDataOfProject 'C:\\home\\projects\\accord\\cicero-template-library\\src\\fragile-goods'
@@ -228,7 +230,7 @@ class SetupClient
       j = JSON.parse(params[0])
       result = await @templateProcess j, params[1], params[2] # @todo Should JSON.parse be here?
     if (command == 'export')
-      result = @export params[0], params[1]
+      result = @extract params[0], ''
     if (command == 'exportmulti')
       result = @export params[0], params[1]
     if (command == 'zip')
@@ -271,7 +273,7 @@ class SetupClient
       base = @baseTemplateDirectory
 
       # 1. Get all folders in C:\home\projects\accord\cicero-template-library\src
-      dir = '/home/projects/accord/cicero-template-library/src'
+      dir =  path.sep + 'home' + path.sep + 'projects' + path.sep + 'accord' + path.sep + 'cicero-template-library' + path.sep + 'src'
       test = fs.readdirSync(dir, 'utf8')
       directories = []
 
@@ -291,7 +293,7 @@ class SetupClient
         if fileContents.length > 0
           name = JSON.parse(fileContents).name
           description = JSON.parse(fileContents).description
-        [mydir, name, description]
+        [d, name, description]
 
       # 3. Compose data to return and return back to caller
       readmesWithoutEmpty = readmes.filter (d) => d[1].length > 0
