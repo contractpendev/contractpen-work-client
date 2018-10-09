@@ -17,6 +17,7 @@ ContractTemplate = require './ContractTemplate'
 prettyjson = require 'prettyjson'
 zipIt = require('zip-a-folder')
 read = require('fs-readdir-recursive')
+memoize = require("memoizee")
 
 class SetupClient
 
@@ -109,19 +110,23 @@ class SetupClient
       await t.template(jsonData, grammar, dir)
     catch e
       ''
+  _extractFunction = (directory2, isMulti2) =>
+    console.log 'extract! with directory ' + directory2
+    meta = new ContractMetadata()
+    if isMulti2
+      i = await meta.iterateFoldersInDirectory directory2
+    else
+      i = await meta.singleDirectory directory2
+
+    c = await meta.directoriesToJson i
+    m = await meta.metaDataOfDirectoriesJson c
+    m
+
+  _memoizeExtractFunction = memoize _extractFunction
 
   extract: (directory, jsonFile, isMulti) =>
     try
-      console.log 'extract! with directory ' + directory
-      meta = new ContractMetadata()
-      if isMulti
-        i = await meta.iterateFoldersInDirectory directory
-      else
-        i = await meta.singleDirectory directory
-
-      c = await meta.directoriesToJson i
-      m = await meta.metaDataOfDirectoriesJson c
-      m
+      _memoizeExtractFunction directory, isMulti
     catch e
       console.log e
       ''

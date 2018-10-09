@@ -31,6 +31,7 @@
     "handlebars-helpers": "^0.10.0",
     "html-entities": "^1.2.1",
     "json-decycle": "^1.0.0",
+    "memoizee": "^0.4.14",
     "node-cache": "^4.2.0",
     "prettyjson": "^1.2.1",
     "request": "^2.88.0",
