@@ -2,8 +2,9 @@
 
 namespace {{data.dataModels.0.ciceroNameSpace}}
 
-import org.accordproject.cicero.contract.* from https://models.accordproject.org/cicero/contract.cto
-import org.accordproject.cicero.runtime.* from https://models.accordproject.org/cicero/runtime.cto
+{{#each data.dataModels.0.importStatements}}
+import {{importPackage}} from {{importFrom}}
+{{/each}}
 
 {{#each data.dataModels}}
 {{lowercase ciceroAssetOrTransaction}} {{ciceroClassName}}{{#if (equalsLength ciceroExtendsClass 0)}}{{else}} extends {{ciceroExtendsClass}}{{/if}} {

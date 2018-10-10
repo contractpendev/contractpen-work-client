@@ -447,6 +447,10 @@ class SetupClient
           ciceroNameSpace
           ciceroExtendsClass
           ciceroAssetOrTransaction
+          importStatements {
+            importPackage
+            importFrom
+          }
           fields {
             fieldName
             dataType
