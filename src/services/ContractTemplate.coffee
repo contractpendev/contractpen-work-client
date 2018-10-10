@@ -26,6 +26,6 @@ class ContractTemplate
         clause.setData jsonData
         clause.generateText())
       .catch((err) =>
-        console.error(util.format('Failed creating template from directory: %s' + err)))
+        console.error(util.format('Failed creating template from directory: %s', err)))
 
 module.exports = ContractTemplate
