@@ -8,7 +8,15 @@ import org.accordproject.cicero.runtime.* from https://models.accordproject.org/
 {{#each data.dataModels}}
 {{lowercase ciceroAssetOrTransaction}} {{ciceroClassName}}{{#if (equalsLength ciceroExtendsClass 0)}}{{else}} extends {{ciceroExtendsClass}}{{/if}} {
 {{#each fields}}
-    o {{dataType}} {{camelcase fieldName}}
+    {{#if isEnum}}
+        o {{fieldName}}
+    {{/if}}
+    {{#if isField}}
+        o {{dataType}} {{fieldName}}
+    {{/if}}
+    {{#if isRelationship}}
+        --> {{dataType}} {{fieldName}}
+    {{/if}}
 {{/each}}
 }
 

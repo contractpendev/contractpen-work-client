@@ -109,18 +109,24 @@ class SetupClient
       dir = @baseTemplateDirectory + directory
       await t.template(jsonData, grammar, dir)
     catch e
+      console.log e
       ''
-  _extractFunction = (directory2, isMulti2) =>
-    console.log 'extract! with directory ' + directory2
-    meta = new ContractMetadata()
-    if isMulti2
-      i = await meta.iterateFoldersInDirectory directory2
-    else
-      i = await meta.singleDirectory directory2
 
-    c = await meta.directoriesToJson i
-    m = await meta.metaDataOfDirectoriesJson c
-    m
+  _extractFunction = (directory2, isMulti2) =>
+    try
+      console.log 'extract! with directory ' + directory2
+      meta = new ContractMetadata()
+      if isMulti2
+        i = await meta.iterateFoldersInDirectory directory2
+      else
+        i = await meta.singleDirectory directory2
+
+      c = await meta.directoriesToJson i
+      m = await meta.metaDataOfDirectoriesJson c
+      m
+    catch e
+      console.log e
+      ''
 
   _memoizeExtractFunction = memoize _extractFunction
 
@@ -152,6 +158,7 @@ class SetupClient
       exec = new ContractExecution()
       exec.execute(templatePath, samplePath, requestPath, statePath)
     catch e
+      console.log e
       ''
 
   execute2: (folder) =>
@@ -170,6 +177,7 @@ class SetupClient
       exec = new ContractExecution()
       exec.execute(templatePath, samplePath, requestPath, statePath)
     catch e
+      console.log e
       ''
 
   # Submit test task to the server
@@ -217,38 +225,42 @@ class SetupClient
     #  return
 
   commandSwitcher: (command, params) =>
-    console.log 'commandSwitcher'
-    result = null
-    if (command == 'deploy')
-      result = @deploy params[0], params[1]
-    if (command == 'execute')
-      result = @execute params[0], params[1], params[2], params[3]
-    if (command == 'execute2')
-      result = @execute2 params[0]
-    if (command == 'template')
-      console.log ''
-      console.log ''
-      console.log ''
-      console.log 'at template'
-      console.log params[0]
-      console.log JSON.parse(params[0])
-      j = JSON.parse(params[0])
-      result = await @templateProcess j, params[1], params[2] # @todo Should JSON.parse be here?
-    if (command == 'export')
-      result = @extract params[0], ''
-    if (command == 'exportmulti')
-      result = @export params[0], params[1]
-    if (command == 'zip')
-      result = @zipFolder params[0]
-    if (command == 'directorytree')
-      result = @directoryTree params[0]
-    if (command == 'filecontents')
-      result = @fileContents params[0]
-    if (command == 'cicerotemplates')
-      result = @ciceroTemplates params[0]
-    console.log 'result back'
-    console.log result
-    result
+    try
+      console.log 'commandSwitcher'
+      result = null
+      if (command == 'deploy')
+        result = @deploy params[0], params[1]
+      if (command == 'execute')
+        result = @execute params[0], params[1], params[2], params[3]
+      if (command == 'execute2')
+        result = @execute2 params[0]
+      if (command == 'template')
+        console.log ''
+        console.log ''
+        console.log ''
+        console.log 'at template'
+        console.log params[0]
+        console.log JSON.parse(params[0])
+        j = JSON.parse(params[0])
+        result = await @templateProcess j, params[1], params[2] # @todo Should JSON.parse be here?
+      if (command == 'export')
+        result = @extract params[0], ''
+      if (command == 'exportmulti')
+        result = @export params[0], params[1]
+      if (command == 'zip')
+        result = @zipFolder params[0]
+      if (command == 'directorytree')
+        result = @directoryTree params[0]
+      if (command == 'filecontents')
+        result = @fileContents params[0]
+      if (command == 'cicerotemplates')
+        result = @ciceroTemplates params[0]
+      console.log 'result back'
+      console.log result
+      result
+    catch e
+      console.log e
+      null
 
   directoryTree: (folder) =>
     try
@@ -260,6 +272,7 @@ class SetupClient
       console.log dirFixed
       dirFixed
     catch e
+      console.log e
       []
 
   fileContents: (path) =>
@@ -269,7 +282,8 @@ class SetupClient
       file = fs.readFileSync(base + path, 'utf8')
       console.log 'file contents'
       file
-    catch ex
+    catch e
+      console.log e
       ''
 
   ciceroTemplates: (directoryPath) =>
@@ -303,8 +317,8 @@ class SetupClient
       # 3. Compose data to return and return back to caller
       readmesWithoutEmpty = readmes.filter (d) => d[1].length > 0
       readmesWithoutEmpty
-    catch ex
-      console.log ex
+    catch e
+      console.log e
       ''
 
   zipFolder: (folder) =>
@@ -437,6 +451,9 @@ class SetupClient
             fieldName
             dataType
             dropDownDataType
+            isEnum
+            isField
+            isRelationship
           }
         }
       }
