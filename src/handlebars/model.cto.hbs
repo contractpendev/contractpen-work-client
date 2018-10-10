@@ -10,7 +10,7 @@ import {{importPackage}} from {{importFrom}}
 {{lowercase ciceroAssetOrTransaction}} {{ciceroClassName}}{{#if (equalsLength ciceroExtendsClass 0)}}{{else}} extends {{ciceroExtendsClass}}{{/if}} {
 {{#each fields}}
     {{#if isEnum}}
-        o {{fieldName}}
+        o {{dataType}} {{fieldName}}
     {{/if}}
     {{#if isField}}
         o {{dataType}} {{fieldName}}
