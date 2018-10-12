@@ -5,6 +5,7 @@ helpers = require('handlebars-helpers')(handlebars: Handlebars)
 express = require 'express'
 bodyParser = require 'body-parser'
 fs = require 'fs'
+fse = require 'fs-extra'
 graphQlRequest = require 'graphql-request'
 program = require 'commander'
 path = require 'path'
@@ -18,6 +19,7 @@ prettyjson = require 'prettyjson'
 zipIt = require('zip-a-folder')
 read = require('fs-readdir-recursive')
 memoize = require("memoizee")
+#ncp = require('ncp').ncp
 
 class SetupClient
 
@@ -39,22 +41,22 @@ class SetupClient
       workerId = @getWorkerId()
       await @sendTestWorkEvent workerId, serverIp, serverPort
 
-    program.usage('testwork2 <server ip address> <server port>').command('testwork2 <server ip address> <server port>').action (serverIp, serverPort, cmd) =>
+    program.usage('testwork2 <server ip address> <server port>').command('testwork2 <server ip address> <server port>').action (serverIp, serverPort) =>
       console.log 'send test work event'
       workerId = @getWorkerId()
       await @sendTestWorkEvent2 workerId, serverIp, serverPort
 
     # ?
-    program.usage('template <input json file> <directory of project>').command('template <input json file> <directory of project>').action (inputJsonFile, directory, cmd) =>
+    program.usage('template <input json file> <directory of project>').command('template <input json file> <directory of project>').action (inputJsonFile, directory) =>
       console.log 'template ' + inputJsonFile + ' directory ' + directory
       jsonData = JSON.parse(fs.readFileSync(inputJsonFile, 'utf8'))
       await @templateProcess jsonData, null, directory
 
     # Deploy a ContractPen contract to an Accord Project folder structure
-    program.usage('deploy <guid> <dir>').command('deploy <guid> <dir>').action (guid, directoryToCreate, cmd) =>
+    program.usage('deploy <guid> <dir> <origionalTemplateDir>').command('deploy <guid> <dir> <origionalTemplateDir>').action (guid, directoryToCreate, origionalTemplateDir) =>
       console.log 'deploying guid ' + guid
       console.log 'to directory ' + directoryToCreate
-      @deploy guid, directoryToCreate
+      @deploy guid, directoryToCreate, origionalTemplateDir
 
     program.usage('export <dir> <to json file>').command('export <dir> <to json file>').action (directory, jsonFile, cmd) =>
       console.log 'extract single directory to json file'
@@ -98,10 +100,10 @@ class SetupClient
 
     program.parse process.argv
 
-  deploy: (guid, directoryToCreate) =>
+  deploy: (guid, directoryToCreate, origionalTemplateDir) =>
     dir = @baseTemplateDirectory + directoryToCreate
     contractJson = await @fetchContractJsonFromServer guid
-    await @createProject dir, contractJson
+    await @createProject dir, contractJson, origionalTemplateDir
 
   templateProcess: (jsonData, grammar, directory) =>
     try
@@ -187,7 +189,7 @@ class SetupClient
       targetWorkerId: null
       sendResultToWorkerId: null
       command: 'deploy'
-      params: ['b03d0879-1545-4ce9-bd08-7915457ce92c', 'testcicerofolder']
+      params: ['b03d0879-1545-4ce9-bd08-7915457ce92c', 'testcicerofolder', '@todo this']
 
     request.post {
       url: "http://#{serverId}:#{port}/api/submitTask"
@@ -229,7 +231,7 @@ class SetupClient
       console.log 'commandSwitcher'
       result = null
       if (command == 'deploy')
-        result = @deploy params[0], params[1]
+        result = @deploy params[0], params[1], params[2]
       if (command == 'execute')
         result = @execute params[0], params[1], params[2], params[3]
       if (command == 'execute2')
@@ -388,23 +390,26 @@ class SetupClient
   idName: (name) -> name.trim().split(' ').join('_').toLowerCase()
 
   # Executes all handlebars templates and places them in the destination directory
-  createProject: (dir, contract) =>
+  createProject: (dir, contract, origionalTemplateDir) =>
     try
       console.log 'create project'
       console.log dir
-      @createDirectoryIfNotExist dir
-      @createDirectoryIfNotExist dir + path.sep + 'grammar'
-      @createDirectoryIfNotExist dir + path.sep + 'lib'
-      @createDirectoryIfNotExist dir + path.sep + 'models'
-      @createDirectoryIfNotExist dir + path.sep + 'test'
-      @createFile dir + path.sep + 'package.json', @template('package.json.hbs', {projectName: @idName(contract.contract.name)})
-      @createFile dir + path.sep + 'README.md', @template('README.md.hbs', {})
-      @createFile dir + path.sep + 'request.json', @template('request.json.hbs', {})
-      @createFile dir + path.sep + 'sample.txt', @template('sample.txt.hbs', {})
-      @createFile dir + path.sep + 'state.json', @template('state.json.hbs', {})
-      @createFile dir + path.sep + 'test' + path.sep + 'logic.js', @template('logic.js.hbs', {})
-      @createFile dir + path.sep + 'grammar' + path.sep + 'template.tem', @template('template.tem.hbs', {})
-      @createFile dir + path.sep + 'lib' + path.sep + 'logic.ergo', @template('logic.ergo.hbs', {})
+      console.log origionalTemplateDir
+      #@createDirectoryIfNotExist dir
+      fse.copySync origionalTemplateDir, dir
+      #ncp origionalTemplateDir dir
+      #@createDirectoryIfNotExist dir + path.sep + 'grammar'
+      #@createDirectoryIfNotExist dir + path.sep + 'lib'
+      #@createDirectoryIfNotExist dir + path.sep + 'models'
+      #@createDirectoryIfNotExist dir + path.sep + 'test'
+      #@createFile dir + path.sep + 'package.json', @template('package.json.hbs', {projectName: @idName(contract.contract.name)})
+      #@createFile dir + path.sep + 'README.md', @template('README.md.hbs', {})
+      #@createFile dir + path.sep + 'request.json', @template('request.json.hbs', {})
+      #@createFile dir + path.sep + 'sample.txt', @template('sample.txt.hbs', {})
+      #@createFile dir + path.sep + 'state.json', @template('state.json.hbs', {})
+      #@createFile dir + path.sep + 'test' + path.sep + 'logic.js', @template('logic.js.hbs', {})
+      #@createFile dir + path.sep + 'grammar' + path.sep + 'template.tem', @template('template.tem.hbs', {})
+      #@createFile dir + path.sep + 'lib' + path.sep + 'logic.ergo', @template('logic.ergo.hbs', {})
       @createFile dir + path.sep + 'models' + path.sep + 'model.cto', @template('model.cto.hbs', {dataModels: contract.contract.dataModels})
     catch e
       e
