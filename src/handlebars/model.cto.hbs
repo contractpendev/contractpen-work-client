@@ -9,8 +9,14 @@ import {{importPackage}} from {{importFrom}}
 {{#each data.dataModels}}
 {{lowercase ciceroAssetOrTransaction}} {{ciceroClassName}}{{#if (equalsLength ciceroExtendsClass 0)}}{{else}} extends {{ciceroExtendsClass}}{{/if}} {
 {{#each fields}}
-    {{#if isEnum}}
+    {{#if isConcept}}
+        o {{dataType}} {{fieldName}} optional
+    {{/if}}
+    {{#if isEvent}}
         o {{dataType}} {{fieldName}}
+    {{/if}}
+    {{#if isEnum}}
+        o {{fieldName}}
     {{/if}}
     {{#if isField}}
         o {{dataType}} {{fieldName}}

@@ -19,6 +19,8 @@ prettyjson = require 'prettyjson'
 zipIt = require('zip-a-folder')
 read = require('fs-readdir-recursive')
 memoize = require("memoizee")
+Syntax = require 'syntax'
+
 #ncp = require('ncp').ncp
 
 class SetupClient
@@ -277,13 +279,22 @@ class SetupClient
       console.log e
       []
 
+  syntaxHighlighting: (path, file) =>
+    syntax = new Syntax(
+      language: 'javascript'
+      cssPrefix: 'hljs-')
+    syntax.richtext file
+    syntax.html()
+
   fileContents: (path) =>
     try
       console.log 'file contents start'
       base = @baseTemplateDirectory
       file = fs.readFileSync(base + path, 'utf8')
+      # Based on filename, do syntax highlighting
+      result = @syntaxHighlighting path, file
       console.log 'file contents'
-      file
+      result
     catch e
       console.log e
       ''
@@ -397,7 +408,9 @@ class SetupClient
       console.log origionalTemplateDir
       #@createDirectoryIfNotExist dir
       fse.copySync origionalTemplateDir, dir
-      #ncp origionalTemplateDir dir
+      fse.removeSync dir + path.sep + 'models'
+      @createDirectoryIfNotExist dir + path.sep + 'models'
+        #ncp origionalTemplateDir dir
       #@createDirectoryIfNotExist dir + path.sep + 'grammar'
       #@createDirectoryIfNotExist dir + path.sep + 'lib'
       #@createDirectoryIfNotExist dir + path.sep + 'models'
