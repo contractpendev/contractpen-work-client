@@ -17,6 +17,9 @@ class ContractExecution
 
   test: () -> 0
 
+  # This code in executeTemplate is copied from the Cicero code with only one line changed, the addition of this line:
+  # sampleText = file.normalizeNL(sampleText)
+  # to fix a bug on windows https://github.com/accordproject/cicero/issues/219
   executeTemplate: (templatePath, samplePath, requestsPath, statePath) =>
     clause = undefined
     sampleText = fs.readFileSync(samplePath, 'utf8')
