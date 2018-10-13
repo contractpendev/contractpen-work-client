@@ -179,7 +179,8 @@ class SetupClient
       console.log requestPath
       console.log statePath
       exec = new ContractExecution()
-      exec.execute(templatePath, samplePath, requestPath, statePath)
+      result = await exec.execute(templatePath, samplePath, requestPath, statePath)
+      result
     catch e
       console.log e
       ''

@@ -106,6 +106,11 @@ class ContractMetadata
   metaDataOfProject: (projectDirectory) =>
     try
       console.log projectDirectory
+      requestJson = ''
+      try
+        requestJson = fs.readFileSync(projectDirectory + path.sep + 'request.json', 'utf8')
+      catch ex
+        console.log ex
       template = await Template.fromDirectory projectDirectory
       hash = template.getHash()
       identifier = template.getIdentifier()
@@ -120,6 +125,7 @@ class ContractMetadata
       stateTypes = template.getStateTypes()
 
       result =
+        requestJson: requestJson
         hash: hash
         identifier: identifier
         metadata: metadata
