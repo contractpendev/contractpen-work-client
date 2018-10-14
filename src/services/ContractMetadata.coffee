@@ -11,6 +11,7 @@ Ergo = require('@accordproject/ergo-compiler/lib/ergo')
 find = require 'find'
 decycle = require('json-decycle').decycle
 file = require 'file-normalize'
+uuidv4 = require 'uuid/v4'
 
 class ContractMetadata
 

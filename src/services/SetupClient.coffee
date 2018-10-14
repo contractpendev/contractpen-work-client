@@ -81,6 +81,11 @@ class SetupClient
       result = await @execute2 folder
       console.log result
 
+    program.usage('execute3 <folder>').command('execute3 <folder>').action (folder) =>
+      console.log 'execute3 cicero'
+      result = await @execute3 folder, '', '', ''
+      console.log result
+
     program.usage('zip <folder>').command('zip <folder>').action (folder, cmd) =>
       console.log 'zip folder ' + folder
       @zipFolder folder
@@ -185,6 +190,22 @@ class SetupClient
       console.log e
       ''
 
+  execute3: (folder, clauseDataJson, requestJson, stateJson) =>
+    try
+      console.log 'execute3!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+      base = @baseTemplateDirectory
+      f = base + folder
+      templatePath = f
+      samplePath = f + path.sep + 'sample.txt'
+      requestPath = [f + path.sep + 'request.json']
+      statePath = f + path.sep + 'state.json'
+      exec = new ContractExecution()
+      result = await exec.execute2(templatePath, samplePath, requestPath, statePath, clauseDataJson, requestJson, stateJson)
+      result
+    catch e
+      console.log e
+      ''
+
   # Submit test task to the server
   sendTestWorkEvent: (workerId, serverId, port) ->
     workData =
@@ -239,6 +260,8 @@ class SetupClient
         result = @execute params[0], params[1], params[2], params[3]
       if (command == 'execute2')
         result = @execute2 params[0]
+      if (command == 'execute3')
+        result = @execute3 params[0], params[1], params[2], params[3]
       if (command == 'template')
         console.log ''
         console.log ''
@@ -355,6 +378,8 @@ class SetupClient
       result.then (r) =>
         console.log 'Promise finished and result is'
         console.log r
+
+        # @todo Handle the error case when: if (r==null)
 
         # The result depends on the command
         # deploy: If the folder exists

@@ -10,6 +10,7 @@ Engine = require('@accordproject/cicero-engine').Engine
 Ergo = require('@accordproject/ergo-compiler/lib/ergo')
 find = require 'find'
 file = require 'file-normalize'
+uuidv4 = require 'uuid/v4'
 
 class ContractExecution
 
@@ -57,6 +58,57 @@ class ContractExecution
   execute: (templatePath, samplePath, requestsPath, statePath) =>
     try
       await @executeTemplate templatePath, samplePath, requestsPath, statePath
+    catch e
+      console.log e
+      null
+
+  # clauseData is the contract data
+  # requestData is the request data
+  executeTemplate2: (templatePath, samplePath, requestsPath, statePath, clauseData, requestData, stateData) =>
+    clause = undefined
+    stateJson = undefined
+
+    # @todo Is requestData in JSON format or text format at this point? should be like:
+    # {
+    #    "$class":"org.accordproject.acceptanceofdelivery.InspectDeliverable",
+    #    "deliverableReceivedAt": "January 1, 2018 16:34:00",
+    #    "inspectionPassed": true
+    #}
+    requestJson = JSON.parse(requestData)
+    #i = 0
+    #while i < requestsPath.length
+    #  requestsJson.push JSON.parse(fs.readFileSync(requestsPath[i], 'utf8'))
+    #  i++
+
+    stateJson = JSON.parse(stateData)
+    console.log(stateJson)
+
+    if (!(stateJson['$class']))
+      console.log 'no state.'
+      # state JSON file
+      if !fs.existsSync(statePath)
+        console.log 'A state file was not provided, generating default state object. Try the --state flag or create a state.json in the root folder of your template.'
+        stateJson =
+          '$class': 'org.accordproject.cicero.contract.AccordContractState'
+          stateId: uuidv4()
+      else
+        stateJson = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+
+    Template.fromDirectory(templatePath).then((template) ->
+      clause = new Clause(template)
+      clause.setData(JSON.parse(clauseData))
+      engine = new Engine
+      # First execution to get the initial response
+      firstRequest = requestJson
+      initResponse = engine.execute(clause, firstRequest, stateJson)
+      initResponse
+    ).catch (err) ->
+      console.log err.message
+      return
+
+  execute2: (templatePath, samplePath, requestsPath, statePath, clauseData, requestData, stateData) =>
+    try
+      await @executeTemplate2 templatePath, samplePath, requestsPath, statePath, clauseData, requestData, stateData
     catch e
       console.log e
       null
