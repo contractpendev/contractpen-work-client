@@ -10,6 +10,7 @@ Engine = require('@accordproject/cicero-engine').Engine
 Ergo = require('@accordproject/ergo-compiler/lib/ergo')
 find = require 'find'
 decycle = require('json-decycle').decycle
+file = require 'file-normalize'
 
 class ContractMetadata
 
@@ -103,6 +104,27 @@ class ContractMetadata
         meta_data: meta
     result
 
+  executeTemplateWithTemplateClassInstance: (template, templatePath, samplePath, requestsPath, statePath) =>
+    clause = undefined
+    sampleText = fs.readFileSync(samplePath, 'utf8')
+    sampleText = file.normalizeNL(sampleText)
+    requestsJson = []
+    stateJson = undefined
+    i = 0
+    while i < requestsPath.length
+      requestsJson.push JSON.parse(fs.readFileSync(requestsPath[i], 'utf8'))
+      i++
+    if !fs.existsSync(statePath)
+      console.log 'A state file was not provided, generating default state object. Try the --state flag or create a state.json in the root folder of your template.'
+      stateJson =
+        '$class': 'org.accordproject.cicero.contract.AccordContractState'
+        stateId: uuidv4()
+    else
+      stateJson = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    clause = new Clause(template)
+    clause.parse sampleText
+    clause.data
+
   metaDataOfProject: (projectDirectory) =>
     try
       console.log projectDirectory
@@ -112,6 +134,11 @@ class ContractMetadata
       catch ex
         console.log ex
       template = await Template.fromDirectory projectDirectory
+      samplePath = projectDirectory + path.sep + 'sample.txt'
+      requestPath = [projectDirectory + path.sep + 'request.json']
+      statePath = projectDirectory + path.sep + 'state.json'
+      # Execute to extract the default data for the clause
+      defaultClauseData = await @executeTemplateWithTemplateClassInstance(template, projectDirectory, samplePath, requestPath, statePath)
       hash = template.getHash()
       identifier = template.getIdentifier()
       metadata = template.getMetadata()
@@ -125,6 +152,7 @@ class ContractMetadata
       stateTypes = template.getStateTypes()
 
       result =
+        defaultClauseData: JSON.stringify(defaultClauseData)
         requestJson: requestJson
         hash: hash
         identifier: identifier
