@@ -345,7 +345,7 @@ class SetupClient
       null
 
   subscribeCluster: (serverId, port) =>
-    socket = new ClusterWS(url: 'ws://localhost:3050')
+    socket = new ClusterWS(url: 'ws://localhost:3050', autoReconnect: true)
 
     # Client must execute the job as given from the server and reply the result back to the server
     socket.on 'executeJob', (job) =>
