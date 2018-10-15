@@ -502,6 +502,7 @@ class SetupClient
             isEnum
             isField
             isRelationship
+            isArray
           }
         }
       }

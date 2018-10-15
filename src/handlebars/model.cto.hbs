@@ -19,7 +19,7 @@ import {{importPackage}} from {{importFrom}}
         o {{fieldName}}
     {{/if}}
     {{#if isField}}
-        o {{dataType}} {{fieldName}}
+        o {{dataType}}{{#if isArray}}[]{{/if}} {{fieldName}}
     {{/if}}
     {{#if isRelationship}}
         --> {{dataType}} {{fieldName}}
