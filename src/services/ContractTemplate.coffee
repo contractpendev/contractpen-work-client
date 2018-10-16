@@ -18,6 +18,8 @@ class ContractTemplate
   test: () -> 0
 
   template: (jsonData, grammar, directory) =>
+    console.log 'template called with directory'
+    console.log directory
     nl = ''
     try
       template = await Template.fromDirectory(directory)
