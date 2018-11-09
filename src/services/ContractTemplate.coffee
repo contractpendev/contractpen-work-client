@@ -1,5 +1,5 @@
 
-{ readdir: readdir, stat: stat } = require("fs").promises
+{ readdir: readdirSync, stat: statSync } = require("fs")
 { join: join } = require("path")
 fs = require 'fs'
 path = require 'path'

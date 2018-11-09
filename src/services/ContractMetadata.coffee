@@ -1,5 +1,5 @@
 
-{ readdir: readdir, stat: stat } = require("fs").promises
+{ readdir: readdirSync, stat: statSync } = require("fs")
 { join: join } = require("path")
 fs = require 'fs'
 path = require 'path'
@@ -31,7 +31,9 @@ class ContractMetadata
       "clauseId": "427c99b0-6df4-11e8-bb3b-67a2e79acc24"
     }
 
-    template = await Template.fromDirectory('C:\\home\\projects\\contractpen_node_client\\testcicerofolder')
+    dir = 'C:\\home\\projects\\contractpen_node_client\\testcicerofolder'
+
+    template = await Template.fromDirectory(dir)
     clause = new Clause(template)
     clause.setData testLatePenaltyInput
     n1 = clause.generateText()

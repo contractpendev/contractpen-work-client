@@ -330,6 +330,10 @@ class SetupClient
 
       # 1. Get all folders in C:\home\projects\accord\cicero-template-library\src
       dir =  path.sep + 'home' + path.sep + 'projects' + path.sep + 'accord' + path.sep + 'cicero-template-library' + path.sep + 'src'
+      osvar = process.platform
+      if osvar == 'darwin'
+        dir = path.sep + 'Users' + path.sep + 'philipandrew' + path.sep + 'projects' + path.sep + 'accord' + path.sep + 'cicero-template-library' + path.sep + 'src'
+
       test = fs.readdirSync(dir, 'utf8')
       directories = []
 
