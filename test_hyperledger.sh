@@ -1,0 +1,2 @@
+./run.sh deployHyperledger "path"
+

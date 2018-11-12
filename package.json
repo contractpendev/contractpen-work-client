@@ -38,6 +38,7 @@
     "prettyjson": "^1.2.1",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
+    "save-buffer": "^1.1.0",
     "syntax": "^1.4.8",
     "uuid": "^3.3.2",
     "uws": "^10.148.1",

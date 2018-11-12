@@ -14,7 +14,7 @@ if os.type() is 'Windows_NT'
   baseTemplateDirectory = '\\home\\projects\\contractpen_node_client\\templates\\'
 else
 if os.type() is 'Darwin'
-  baseTemplateDirectory = '/Users/philipandrew/projects/contractpen_template_dir'
+  baseTemplateDirectory = '/Users/philipandrew/projects/contractpen_template_dir/'
 else 
 if os.type() is 'Linux'
   baseTemplateDirectory = '/root/template/'

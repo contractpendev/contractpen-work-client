@@ -15,6 +15,7 @@ uuidv1 = require 'uuid/v1'
 ContractMetadata = require './ContractMetadata'
 ContractExecution = require './ContractExecution'
 ContractTemplate = require './ContractTemplate'
+
 prettyjson = require 'prettyjson'
 zipIt = require('zip-a-folder')
 read = require('fs-readdir-recursive')
@@ -104,6 +105,10 @@ class SetupClient
       console.log 'subscribe, attempting to subscribe to server for work'
       console.log 'attempting ' + serverIp + ':' + serverPort
       await @subscribeCluster serverIp, serverPort
+
+    program.usage('deployHyperledger <path>').command('deployHyperledger <path>').action (path, cmd) =>
+      console.log 'hi!'
+      @deployHyperledger path
 
     program.parse process.argv
 
@@ -514,6 +519,15 @@ class SetupClient
     """
     # http://api.contractpen.com/graphQl
     await graphQlRequest.request 'http://localhost:4000/graphQl', query
+
+  deployHyperledger: (path) =>
+    #deploy = new HyperledgerDeploy()
+    console.log 'should deploy hyperedger'
+    console.log path
+    t = @container.resolve "HyperledgerDeploy"
+    console.log t
+    #await deploy.createBusinessNetworkArchiveFile('what')
+    console.log ''
 
 module.exports = SetupClient
 
