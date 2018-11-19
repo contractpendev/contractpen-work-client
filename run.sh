@@ -1,1 +1,1 @@
-run subscribe localhost 3050
+run2 subscribe localhost 3050
