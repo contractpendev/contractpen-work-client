@@ -1,0 +1,567 @@
+[
+  {
+    "project_path": "C:\\home\\projects\\accord\\cicero-template-library\\src\\one-time-payment-tr",
+    "cto_paths": [
+      {
+        "ctoPath": "C:\\home\\projects\\accord\\cicero-template-library\\src\\one-time-payment-tr\\models\\model.cto",
+        "json": {
+          "type": "Program",
+          "namespace": "org.accordtr.onetimepayment",
+          "imports": [
+            {
+              "namespace": "org.accordproject.cicero.contract.*",
+              "uri": "https://models.accordproject.org/cicero/contract.cto"
+            },
+            {
+              "namespace": "org.accordproject.cicero.runtime.*",
+              "uri": "https://models.accordproject.org/cicero/runtime.cto"
+            },
+            {
+              "namespace": "org.accordproject.money.MonetaryAmount",
+              "uri": "https://models.accordproject.org/money.cto"
+            }
+          ],
+          "body": [
+            {
+              "type": "TransactionDeclaration",
+              "id": {
+                "type": "Identifier",
+                "name": "PaymentReceivedRequest"
+              },
+              "classExtension": {
+                "type": "ClassExtension",
+                "class": {
+                  "type": "Identifier",
+                  "name": "Request"
+                }
+              },
+              "body": {
+                "type": "ClassDeclarationBody",
+                "declarations": [],
+                "location": {
+                  "start": {
+                    "offset": 392,
+                    "line": 7,
+                    "column": 53
+                  },
+                  "end": {
+                    "offset": 392,
+                    "line": 7,
+                    "column": 53
+                  }
+                }
+              },
+              "idField": null,
+              "abstract": null,
+              "decorators": [],
+              "location": {
+                "start": {
+                  "offset": 340,
+                  "line": 7,
+                  "column": 1
+                },
+                "end": {
+                  "offset": 393,
+                  "line": 7,
+                  "column": 54
+                }
+              }
+            },
+            {
+              "type": "TransactionDeclaration",
+              "id": {
+                "type": "Identifier",
+                "name": "PaymentReceivedResponse"
+              },
+              "classExtension": {
+                "type": "ClassExtension",
+                "class": {
+                  "type": "Identifier",
+                  "name": "Response"
+                }
+              },
+              "body": {
+                "type": "ClassDeclarationBody",
+                "declarations": [],
+                "location": {
+                  "start": {
+                    "offset": 449,
+                    "line": 8,
+                    "column": 55
+                  },
+                  "end": {
+                    "offset": 449,
+                    "line": 8,
+                    "column": 55
+                  }
+                }
+              },
+              "idField": null,
+              "abstract": null,
+              "decorators": [],
+              "location": {
+                "start": {
+                  "offset": 395,
+                  "line": 8,
+                  "column": 1
+                },
+                "end": {
+                  "offset": 450,
+                  "line": 8,
+                  "column": 56
+                }
+              }
+            },
+            {
+              "type": "AssetDeclaration",
+              "id": {
+                "type": "Identifier",
+                "name": "OneTimePaymentState"
+              },
+              "classExtension": {
+                "type": "ClassExtension",
+                "class": {
+                  "type": "Identifier",
+                  "name": "AccordContractState"
+                }
+              },
+              "idField": null,
+              "body": {
+                "type": "ClassDeclarationBody",
+                "declarations": [
+                  {
+                    "type": "FieldDeclaration",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "status"
+                    },
+                    "propertyType": {
+                      "type": "Identifier",
+                      "name": "ContractLifecycleStatus"
+                    },
+                    "array": null,
+                    "default": "UNINITIALIZED",
+                    "optional": null,
+                    "decorators": [],
+                    "location": {
+                      "start": {
+                        "offset": 513,
+                        "line": 11,
+                        "column": 3
+                      },
+                      "end": {
+                        "offset": 573,
+                        "line": 12,
+                        "column": 1
+                      }
+                    }
+                  }
+                ],
+                "location": {
+                  "start": {
+                    "offset": 513,
+                    "line": 11,
+                    "column": 3
+                  },
+                  "end": {
+                    "offset": 573,
+                    "line": 12,
+                    "column": 1
+                  }
+                }
+              },
+              "abstract": null,
+              "decorators": [],
+              "location": {
+                "start": {
+                  "offset": 454,
+                  "line": 10,
+                  "column": 1
+                },
+                "end": {
+                  "offset": 574,
+                  "line": 12,
+                  "column": 2
+                }
+              }
+            },
+            {
+              "type": "EnumDeclaration",
+              "id": {
+                "type": "Identifier",
+                "name": "ContractLifecycleStatus"
+              },
+              "body": {
+                "type": "EnumDeclarationBody",
+                "declarations": [
+                  {
+                    "type": "EnumPropertyDeclaration",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "UNINITIALIZED"
+                    },
+                    "optional": null,
+                    "decorators": [],
+                    "location": {
+                      "start": {
+                        "offset": 612,
+                        "line": 15,
+                        "column": 3
+                      },
+                      "end": {
+                        "offset": 631,
+                        "line": 16,
+                        "column": 3
+                      }
+                    }
+                  },
+                  {
+                    "type": "EnumPropertyDeclaration",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "OBLIGATION_EMITTED"
+                    },
+                    "optional": null,
+                    "decorators": [],
+                    "location": {
+                      "start": {
+                        "offset": 631,
+                        "line": 16,
+                        "column": 3
+                      },
+                      "end": {
+                        "offset": 655,
+                        "line": 17,
+                        "column": 3
+                      }
+                    }
+                  },
+                  {
+                    "type": "EnumPropertyDeclaration",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "COMPLETED"
+                    },
+                    "optional": null,
+                    "decorators": [],
+                    "location": {
+                      "start": {
+                        "offset": 655,
+                        "line": 17,
+                        "column": 3
+                      },
+                      "end": {
+                        "offset": 668,
+                        "line": 18,
+                        "column": 1
+                      }
+                    }
+                  }
+                ]
+              },
+              "decorators": [],
+              "location": {
+                "start": {
+                  "offset": 578,
+                  "line": 14,
+                  "column": 1
+                },
+                "end": {
+                  "offset": 669,
+                  "line": 18,
+                  "column": 2
+                }
+              }
+            },
+            {
+              "type": "AssetDeclaration",
+              "id": {
+                "type": "Identifier",
+                "name": "OneTimePaymentContract"
+              },
+              "classExtension": {
+                "type": "ClassExtension",
+                "class": {
+                  "type": "Identifier",
+                  "name": "AccordContract"
+                }
+              },
+              "idField": null,
+              "body": {
+                "type": "ClassDeclarationBody",
+                "declarations": [
+                  {
+                    "type": "FieldDeclaration",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "buyer"
+                    },
+                    "propertyType": {
+                      "type": "Identifier",
+                      "name": "AccordParty"
+                    },
+                    "array": null,
+                    "default": null,
+                    "optional": null,
+                    "decorators": [],
+                    "location": {
+                      "start": {
+                        "offset": 763,
+                        "line": 24,
+                        "column": 3
+                      },
+                      "end": {
+                        "offset": 786,
+                        "line": 25,
+                        "column": 3
+                      }
+                    }
+                  },
+                  {
+                    "type": "FieldDeclaration",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "seller"
+                    },
+                    "propertyType": {
+                      "type": "Identifier",
+                      "name": "AccordParty"
+                    },
+                    "array": null,
+                    "default": null,
+                    "optional": null,
+                    "decorators": [],
+                    "location": {
+                      "start": {
+                        "offset": 786,
+                        "line": 25,
+                        "column": 3
+                      },
+                      "end": {
+                        "offset": 810,
+                        "line": 26,
+                        "column": 3
+                      }
+                    }
+                  },
+                  {
+                    "type": "FieldDeclaration",
+                    "id": {
+                      "type": "Identifier",
+                      "name": "totalPurchasePrice"
+                    },
+                    "propertyType": {
+                      "type": "Identifier",
+                      "name": "MonetaryAmount"
+                    },
+                    "array": null,
+                    "default": null,
+                    "optional": null,
+                    "decorators": [],
+                    "location": {
+                      "start": {
+                        "offset": 810,
+                        "line": 26,
+                        "column": 3
+                      },
+                      "end": {
+                        "offset": 847,
+                        "line": 27,
+                        "column": 1
+                      }
+                    }
+                  }
+                ],
+                "location": {
+                  "start": {
+                    "offset": 763,
+                    "line": 24,
+                    "column": 3
+                  },
+                  "end": {
+                    "offset": 847,
+                    "line": 27,
+                    "column": 1
+                  }
+                }
+              },
+              "abstract": null,
+              "decorators": [],
+              "location": {
+                "start": {
+                  "offset": 706,
+                  "line": 23,
+                  "column": 1
+                },
+                "end": {
+                  "offset": 848,
+                  "line": 27,
+                  "column": 2
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "meta_data": {
+      "hash": "8c31ca984b8dcb08ccf3a02bf6bfd9f248f036abf3c5dd74d812812480625847",
+      "identifier": "one-time-payment-tr@0.5.0",
+      "metadata": {
+        "packageJson": {
+          "name": "one-time-payment-tr",
+          "version": "0.5.0",
+          "description": "This is an Full Payment Upon Signature Protocol prepared in Turkish Language.",
+          "cicero": {
+            "version": "^0.8.0",
+            "language": "ergo",
+            "template": "contract"
+          }
+        },
+        "readme": "\r\n# Accord Protocol Template: one-time-payment-tr\r\n\r\nThis is an Full Payment Upon Signature Protocol prepared in Turkish Language.\r\n\r\n### Parse\r\nUse the `cicero parse` command to load a template from a directory on disk and then use it to parse input text, echoing the result of parsing. If the input text is valid the parsing result will be a JSON serialized instance of the Template Mode:\r\n\r\nSample template.tem:\r\n\r\n```\r\n        1.1 Banka [{seller}]\r\n        1.2 Müşteri [{buyer}]\r\n\r\n        7. Upon the signing of this Agreement, [{buyer}] shall pay the total purchase price to [{seller}] in the amount of [{totalPurchasePrice}].\r\n```\r\n\r\nSample.txt:\r\n\r\n```\r\n        1.1 Banka \"ACME Corp.\"\r\n        1.2 Müşteri \"Can Doğan\"\r\n\r\n        7. Upon the signing of this Agreement, \"Umut\" shall pay the total purchase price to \"Serkan\" in the amount of 1922.99 TRY.\r\n```\r\n\r\n```\r\ncicero parse --template ./one-time-payment-tr/ --dsl ./one-time-payment-tr/sample.txt\r\nSetting clause data: {\"$class\": \"org.accordtr.onetimepayment.InitRequest\"}\r\n```\r\n\r\n### Execute\r\nUse the `cicero execute` command to load a template from a directory on disk, instantiate a clause based on input text, and then invoke the clause using an incoming JSON payload.\r\n\r\n```\r\ndata.json:\r\n{\r\n   \"$class\": \"org.accordtr.onetimepayment.InitRequest\"\r\n}\r\n```\r\n\r\n```\r\ncicero execute --template ./one-time-payment-tr/ --dsl ./one-time-payment-tr/sample.txt --data ./one-time-payment-tr/data.json \r\n```\r\n\r\nThe results of execution (a JSON serialized object) are displayed. They include:\r\n* Details of the clause executed (name, version, SHA256 hash of clause data)\r\n* The incoming request object\r\n* The output response object\r\n\r\n```\r\n    {\r\n      \"$class\": \"org.accordproject.cicero.runtime.PaymentObligation\",\r\n      \"amount\": {\r\n        \"$class\": \"org.accordproject.money.MonetaryAmount\",\r\n        \"doubleValue\": 1922.00,\r\n        \"currencyCode\": \"TRY\"\r\n      },\r\n      \"description\": \"[object Object] should pay contract amount to [object Object]\",\r\n      \"contract\": \"resource:org.accordproject.cicero.contract.AccordContract#608991e1-4d47-4f52-8c3d-dab7ad003ac9\",\r\n      \"promisor\": \"resource:org.accordproject.cicero.contract.AccordParty#Can%20Do%C4%9Fan\",\r\n      \"promisee\": \"resource:org.accordproject.cicero.contract.AccordParty#ACME%20Corp.\",\r\n      \"eventId\": \"valid\",\r\n      \"timestamp\": \"2018-07-31T08:46:18.749Z\"\r\n      }\r\n    ]\r\n  }\r\n```",
+        "samples": {
+          "default": "TEK SEFERLİK ÖDEME HİZMETİ SÖZLEŞMESİ\r\n\r\nİşbu tek seferlik ödeme hizmeti sözleşmesi (\"Sözleşme\"), aşağıda adı ve ünvanı belirtilen Taraflar arasında \"12/07/2018\" tarihinde imzalanmıştır.\r\n\r\n1. TARAFLAR\r\n\r\n        1.1 Banka \"ACME Corp.\"\r\n        1.2 Müşteri \"Can Doğan\"\r\n\r\n2. SÖZLEŞMENİN KONUSU\r\n\r\n        İşbu Sözleşme uyarınca Banka tarafından Müşteri’ye Müşteri’nin yürütmekte olduğu \"ithalat ihracat\" faaliyetleri kapsamında, Taraflar’ca kararlaştırılan ücret karşılığında,\r\n        tek seferlik elektronik fon transferi, havale veya virman işlemi sunulacaktır.\r\n\r\n3. ÖDEME EMRİNİN ALINMA ZAMANI\r\n\r\n        Müşteri tarafından gönderilen ödeme emri Banka’nın iş saatleri içinde ve her halükarda saat 17.00’dan geç olmamak üzere Banka’ya ulaştığı an alınmış sayılır.\r\n        Saat 17:00’dan sonra alınan ödeme emri Banka tarafından ertesi iş günü alınmış sayılır. Ödeme emri, Banka tarafından alınmasından itibaren incelenir ve aynı\r\n        gün sonuna kadar ödeme emrinin reddi sebeplerinin varlığı halinde Müşteri’ye red gerekçelerini bildirir.\r\n\r\n4. ÖDEMENİN GERÇEKLEŞTİRİLMESİ\r\n\r\n        4.1. Ödeme emrinin Banka’ya verilmesi anından itibaren, Banka işlemi yapmadan önce Müşteri emrinden dönebilir. Ancak Banka işlemi tamamladıktan sonra işlemin geri\r\n        alınması mümkün olmayan durumlarda Banka’nın sorumluluğu söz konusu olmaz. Müşterinin Banka’ya vereceği ödeme emrinde hangi döviz cinsi üzerinden işlem yapacağını\r\n        belirtmekle yükümlüdür. Döviz cinsi üzerinden yapılacak işlemlerde bankanın cari döviz kurları üzerinden işlem yapılacağını Müşteri kabul ve beyan eder.\r\n\r\n        4.2. Müşteri, hata veya kusuru sonucu Banka’nın ödeme işlemini gerçekleştirememesi veya hatalı gerçekleştirmesi halinde Banka’nın sorumlu tutulmayacağını kabul ve taahhüt eder.\r\n\r\n5. ÖDEME HİZMETİNE İLİŞKİN ÜCRET\r\n\r\n        Müşteri, işbu Sözleşme kapsamında gerçekleştirilecek ödemeyle ilgili Banka’nın sağlamış olduğu hizmetler için Banka’ya ücret ödemeyi kabul ve taahhüt eder.\r\n\r\n6. ÖDEME İŞLEMLERİNE İLİŞKİN BİLGİLENDİRME\r\n\r\n        Müşteri, Banka’nın kendisini işbu Sözleşme’nin hükümleri hakkında işbu Sözleşme imzalanmadan önce bilgilendirdiğini, Banka’nın internet sitesinde taslak sözleşme örneğini\r\n        incelediği ve kendisine sözleşmenin imzalı bir kopyasını verdiğini beyan ve kabul eder.\r\n\r\n7. Upon the signing of this Agreement, \"Umut\" shall pay the total purchase price to \"Serkan\" in the amount of 1922.99 TRY."
+        },
+        "type": 0,
+        "language": 0,
+        "targetVersion": "^0.8.0"
+      },
+      "templateAst": {
+        "type": "ContractTemplate",
+        "data": [
+          {
+            "type": "Chunk",
+            "value": "TEK SEFERLİK ÖDEME HİZMETİ SÖZLEŞMESİ\r\n\r\nİşbu tek seferlik ödeme hizmeti sözleşmesi (\"Sözleşme\"), aşağıda adı ve ünvanı belirtilen Taraflar arasında \"12/07/2018\" tarihinde imzalanmıştır.\r\n\r\n1. TARAFLAR\r\n\r\n        1.1 Banka ",
+            "text": "TEK SEFERLİK ÖDEME HİZMETİ SÖZLEŞMESİ\r\n\r\nİşbu tek seferlik ödeme hizmeti sözleşmesi (\"Sözleşme\"), aşağıda adı ve ünvanı belirtilen Taraflar arasında \"12/07/2018\" tarihinde imzalanmıştır.\r\n\r\n1. TARAFLAR\r\n\r\n        1.1 Banka [{",
+            "offset": 0,
+            "lineBreaks": 6,
+            "line": 1,
+            "col": 1
+          },
+          {
+            "type": "Binding",
+            "fieldName": {
+              "type": "varid",
+              "value": "seller",
+              "text": "seller",
+              "offset": 240,
+              "lineBreaks": 0,
+              "line": 7,
+              "col": 21
+            }
+          },
+          {
+            "type": "Chunk",
+            "value": "\r\n        1.2 Müşteri ",
+            "text": "\r\n        1.2 Müşteri [{",
+            "offset": 248,
+            "lineBreaks": 1,
+            "line": 7,
+            "col": 29
+          },
+          {
+            "type": "Binding",
+            "fieldName": {
+              "type": "varid",
+              "value": "buyer",
+              "text": "buyer",
+              "offset": 272,
+              "lineBreaks": 0,
+              "line": 8,
+              "col": 23
+            }
+          },
+          {
+            "type": "Chunk",
+            "value": "\r\n\r\n2. SÖZLEŞMENİN KONUSU\r\n\r\n        İşbu Sözleşme uyarınca Banka tarafından Müşteri’ye Müşteri’nin yürütmekte olduğu \"ithalat ihracat\" faaliyetleri kapsamında, Taraflar’ca kararlaştırılan ücret karşılığında,\r\n        tek seferlik elektronik fon transferi, havale veya virman işlemi sunulacaktır.\r\n\r\n3. ÖDEME EMRİNİN ALINMA ZAMANI\r\n\r\n        Müşteri tarafından gönderilen ödeme emri Banka’nın iş saatleri içinde ve her halükarda saat 17.00’dan geç olmamak üzere Banka’ya ulaştığı an alınmış sayılır.\r\n        Saat 17:00’dan sonra alınan ödeme emri Banka tarafından ertesi iş günü alınmış sayılır. Ödeme emri, Banka tarafından alınmasından itibaren incelenir ve aynı\r\n        gün sonuna kadar ödeme emrinin reddi sebeplerinin varlığı halinde Müşteri’ye red gerekçelerini bildirir.\r\n\r\n4. ÖDEMENİN GERÇEKLEŞTİRİLMESİ\r\n\r\n        4.1. Ödeme emrinin Banka’ya verilmesi anından itibaren, Banka işlemi yapmadan önce Müşteri emrinden dönebilir. Ancak Banka işlemi tamamladıktan sonra işlemin geri\r\n        alınması mümkün olmayan durumlarda Banka’nın sorumluluğu söz konusu olmaz. Müşterinin Banka’ya vereceği ödeme emrinde hangi döviz cinsi üzerinden işlem yapacağını\r\n        belirtmekle yükümlüdür. Döviz cinsi üzerinden yapılacak işlemlerde bankanın cari döviz kurları üzerinden işlem yapılacağını Müşteri kabul ve beyan eder.\r\n\r\n        4.2. Müşteri, hata veya kusuru sonucu Banka’nın ödeme işlemini gerçekleştirememesi veya hatalı gerçekleştirmesi halinde Banka’nın sorumlu tutulmayacağını kabul ve taahhüt eder.\r\n\r\n5. ÖDEME HİZMETİNE İLİŞKİN ÜCRET\r\n\r\n        Müşteri, işbu Sözleşme kapsamında gerçekleştirilecek ödemeyle ilgili Banka’nın sağlamış olduğu hizmetler için Banka’ya ücret ödemeyi kabul ve taahhüt eder.\r\n\r\n6. ÖDEME İŞLEMLERİNE İLİŞKİN BİLGİLENDİRME\r\n\r\n        Müşteri, Banka’nın kendisini işbu Sözleşme’nin hükümleri hakkında işbu Sözleşme imzalanmadan önce bilgilendirdiğini, Banka’nın internet sitesinde taslak sözleşme örneğini\r\n        incelediği ve kendisine sözleşmenin imzalı bir kopyasını verdiğini beyan ve kabul eder.\r\n\r\n7. Upon the signing of this Agreement, ",
+            "text": "\r\n\r\n2. SÖZLEŞMENİN KONUSU\r\n\r\n        İşbu Sözleşme uyarınca Banka tarafından Müşteri’ye Müşteri’nin yürütmekte olduğu \"ithalat ihracat\" faaliyetleri kapsamında, Taraflar’ca kararlaştırılan ücret karşılığında,\r\n        tek seferlik elektronik fon transferi, havale veya virman işlemi sunulacaktır.\r\n\r\n3. ÖDEME EMRİNİN ALINMA ZAMANI\r\n\r\n        Müşteri tarafından gönderilen ödeme emri Banka’nın iş saatleri içinde ve her halükarda saat 17.00’dan geç olmamak üzere Banka’ya ulaştığı an alınmış sayılır.\r\n        Saat 17:00’dan sonra alınan ödeme emri Banka tarafından ertesi iş günü alınmış sayılır. Ödeme emri, Banka tarafından alınmasından itibaren incelenir ve aynı\r\n        gün sonuna kadar ödeme emrinin reddi sebeplerinin varlığı halinde Müşteri’ye red gerekçelerini bildirir.\r\n\r\n4. ÖDEMENİN GERÇEKLEŞTİRİLMESİ\r\n\r\n        4.1. Ödeme emrinin Banka’ya verilmesi anından itibaren, Banka işlemi yapmadan önce Müşteri emrinden dönebilir. Ancak Banka işlemi tamamladıktan sonra işlemin geri\r\n        alınması mümkün olmayan durumlarda Banka’nın sorumluluğu söz konusu olmaz. Müşterinin Banka’ya vereceği ödeme emrinde hangi döviz cinsi üzerinden işlem yapacağını\r\n        belirtmekle yükümlüdür. Döviz cinsi üzerinden yapılacak işlemlerde bankanın cari döviz kurları üzerinden işlem yapılacağını Müşteri kabul ve beyan eder.\r\n\r\n        4.2. Müşteri, hata veya kusuru sonucu Banka’nın ödeme işlemini gerçekleştirememesi veya hatalı gerçekleştirmesi halinde Banka’nın sorumlu tutulmayacağını kabul ve taahhüt eder.\r\n\r\n5. ÖDEME HİZMETİNE İLİŞKİN ÜCRET\r\n\r\n        Müşteri, işbu Sözleşme kapsamında gerçekleştirilecek ödemeyle ilgili Banka’nın sağlamış olduğu hizmetler için Banka’ya ücret ödemeyi kabul ve taahhüt eder.\r\n\r\n6. ÖDEME İŞLEMLERİNE İLİŞKİN BİLGİLENDİRME\r\n\r\n        Müşteri, Banka’nın kendisini işbu Sözleşme’nin hükümleri hakkında işbu Sözleşme imzalanmadan önce bilgilendirdiğini, Banka’nın internet sitesinde taslak sözleşme örneğini\r\n        incelediği ve kendisine sözleşmenin imzalı bir kopyasını verdiğini beyan ve kabul eder.\r\n\r\n7. Upon the signing of this Agreement, [{",
+            "offset": 279,
+            "lineBreaks": 30,
+            "line": 8,
+            "col": 30
+          },
+          {
+            "type": "Binding",
+            "fieldName": {
+              "type": "varid",
+              "value": "buyer",
+              "text": "buyer",
+              "offset": 2479,
+              "lineBreaks": 0,
+              "line": 38,
+              "col": 42
+            }
+          },
+          {
+            "type": "Chunk",
+            "value": " shall pay the total purchase price to ",
+            "text": " shall pay the total purchase price to [{",
+            "offset": 2486,
+            "lineBreaks": 0,
+            "line": 38,
+            "col": 49
+          },
+          {
+            "type": "Binding",
+            "fieldName": {
+              "type": "varid",
+              "value": "seller",
+              "text": "seller",
+              "offset": 2527,
+              "lineBreaks": 0,
+              "line": 38,
+              "col": 90
+            }
+          },
+          {
+            "type": "Chunk",
+            "value": " in the amount of ",
+            "text": " in the amount of [{",
+            "offset": 2535,
+            "lineBreaks": 0,
+            "line": 38,
+            "col": 98
+          },
+          {
+            "type": "Binding",
+            "fieldName": {
+              "type": "varid",
+              "value": "totalPurchasePrice",
+              "text": "totalPurchasePrice",
+              "offset": 2555,
+              "lineBreaks": 0,
+              "line": 38,
+              "col": 118
+            }
+          },
+          {
+            "type": "LastChunk",
+            "value": ".",
+            "text": ".",
+            "offset": 2575,
+            "lineBreaks": 0,
+            "line": 38,
+            "col": 138
+          }
+        ]
+      },
+      "grammar": "TEK SEFERLİK ÖDEME HİZMETİ SÖZLEŞMESİ\r\n\r\nİşbu tek seferlik ödeme hizmeti sözleşmesi (\"Sözleşme\"), aşağıda adı ve ünvanı belirtilen Taraflar arasında \"12/07/2018\" tarihinde imzalanmıştır.\r\n\r\n1. TARAFLAR\r\n\r\n        1.1 Banka [{seller}]\r\n        1.2 Müşteri [{buyer}]\r\n\r\n2. SÖZLEŞMENİN KONUSU\r\n\r\n        İşbu Sözleşme uyarınca Banka tarafından Müşteri’ye Müşteri’nin yürütmekte olduğu \"ithalat ihracat\" faaliyetleri kapsamında, Taraflar’ca kararlaştırılan ücret karşılığında,\r\n        tek seferlik elektronik fon transferi, havale veya virman işlemi sunulacaktır.\r\n\r\n3. ÖDEME EMRİNİN ALINMA ZAMANI\r\n\r\n        Müşteri tarafından gönderilen ödeme emri Banka’nın iş saatleri içinde ve her halükarda saat 17.00’dan geç olmamak üzere Banka’ya ulaştığı an alınmış sayılır.\r\n        Saat 17:00’dan sonra alınan ödeme emri Banka tarafından ertesi iş günü alınmış sayılır. Ödeme emri, Banka tarafından alınmasından itibaren incelenir ve aynı\r\n        gün sonuna kadar ödeme emrinin reddi sebeplerinin varlığı halinde Müşteri’ye red gerekçelerini bildirir.\r\n\r\n4. ÖDEMENİN GERÇEKLEŞTİRİLMESİ\r\n\r\n        4.1. Ödeme emrinin Banka’ya verilmesi anından itibaren, Banka işlemi yapmadan önce Müşteri emrinden dönebilir. Ancak Banka işlemi tamamladıktan sonra işlemin geri\r\n        alınması mümkün olmayan durumlarda Banka’nın sorumluluğu söz konusu olmaz. Müşterinin Banka’ya vereceği ödeme emrinde hangi döviz cinsi üzerinden işlem yapacağını\r\n        belirtmekle yükümlüdür. Döviz cinsi üzerinden yapılacak işlemlerde bankanın cari döviz kurları üzerinden işlem yapılacağını Müşteri kabul ve beyan eder.\r\n\r\n        4.2. Müşteri, hata veya kusuru sonucu Banka’nın ödeme işlemini gerçekleştirememesi veya hatalı gerçekleştirmesi halinde Banka’nın sorumlu tutulmayacağını kabul ve taahhüt eder.\r\n\r\n5. ÖDEME HİZMETİNE İLİŞKİN ÜCRET\r\n\r\n        Müşteri, işbu Sözleşme kapsamında gerçekleştirilecek ödemeyle ilgili Banka’nın sağlamış olduğu hizmetler için Banka’ya ücret ödemeyi kabul ve taahhüt eder.\r\n\r\n6. ÖDEME İŞLEMLERİNE İLİŞKİN BİLGİLENDİRME\r\n\r\n        Müşteri, Banka’nın kendisini işbu Sözleşme’nin hükümleri hakkında işbu Sözleşme imzalanmadan önce bilgilendirdiğini, Banka’nın internet sitesinde taslak sözleşme örneğini\r\n        incelediği ve kendisine sözleşmenin imzalı bir kopyasını verdiğini beyan ve kabul eder.\r\n\r\n7. Upon the signing of this Agreement, [{buyer}] shall pay the total purchase price to [{seller}] in the amount of [{totalPurchasePrice}].",
+      "requestTypes": [
+        "org.accordproject.cicero.runtime.Request",
+        "org.accordtr.onetimepayment.PaymentReceivedRequest"
+      ],
+      "responseTypes": [
+        "org.accordproject.cicero.runtime.Response",
+        "org.accordtr.onetimepayment.PaymentReceivedResponse"
+      ],
+      "emitTypes": [
+        "org.accordproject.cicero.runtime.PaymentObligation",
+        "org.hyperledger.composer.system.Event"
+      ],
+      "stateTypes": [
+        "org.accordtr.onetimepayment.OneTimePaymentState",
+        "org.accordtr.onetimepayment.OneTimePaymentState"
+      ]
+    }
+  }
+]

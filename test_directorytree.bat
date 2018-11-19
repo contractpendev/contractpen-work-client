@@ -1,1 +1,1 @@
-call run directorytree contract_7e472861-4420-4c24-8728-6144201c241d_1918852169
+call run2 directorytree contract_7e472861-4420-4c24-8728-6144201c241d_1918852169

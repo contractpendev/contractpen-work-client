@@ -1,2 +1,2 @@
-./run.sh deployHyperledger "path"
+./run.sh2 deployHyperledger "path"
 

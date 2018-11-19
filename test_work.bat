@@ -1,1 +1,1 @@
-call run testwork localhost 3050
+call run2 testwork localhost 3050

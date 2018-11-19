@@ -1,0 +1,49 @@
+namespace org.accordproject.value
+
+/**
+ * http://schema.org/QuantitativeValue
+ */
+concept QuantitativeValue {
+  o String unitCode
+  o String unitText optional
+  o Double value
+}
+
+/**
+ * SI units of mass
+ */
+enum UnitOfMass {
+  o GRAM
+  o KG
+  o TONNE
+}
+
+/**
+ * Units of Length
+ */
+enum UnitOfLength {
+  o METER
+}
+
+/**
+ * Units of Density
+ */
+enum UnitOfDensity {
+  o KG_PER_CUBIC_METER
+}
+
+/**
+ * Units of Volume
+ */
+enum UnitOfVolume {
+  o CUBIC_METER
+}
+
+/**
+ * Units of Temperature
+ */
+enum UnitOfTemperature {
+  o KELVINS
+  o CELSIUS
+  o FAHRENHEIT
+}
