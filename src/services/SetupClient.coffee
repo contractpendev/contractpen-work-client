@@ -106,10 +106,6 @@ class SetupClient
       console.log 'attempting ' + serverIp + ':' + serverPort
       await @subscribeCluster serverIp, serverPort
 
-    program.usage('deployHyperledger <path>').command('deployHyperledger <path>').action (path, cmd) =>
-      console.log 'hi!'
-      @deployHyperledger path
-
     program.parse process.argv
 
   deploy: (guid, directoryToCreate, origionalTemplateDir) =>
@@ -288,6 +284,8 @@ class SetupClient
         result = @fileContents params[0]
       if (command == 'cicerotemplates')
         result = @ciceroTemplates params[0]
+      if (command == 'createBusinessNetworkArchiveFile')  
+        result = @createBusinessNetworkArchiveFile params[0], params[1], params[2]
       console.log 'result back'
       console.log result
       result
@@ -520,14 +518,9 @@ class SetupClient
     # http://api.contractpen.com/graphQl
     await graphQlRequest.request 'http://localhost:4000/graphQl', query
 
-  deployHyperledger: (path) =>
-    #deploy = new HyperledgerDeploy()
-    console.log 'should deploy hyperedger'
-    console.log path
-    t = @container.resolve "HyperledgerDeploy"
-    console.log t
-    #await deploy.createBusinessNetworkArchiveFile('what')
-    console.log ''
+  createBusinessNetworkArchiveFile: (fromPath, toPath, fileName) =>
+    deploy = @container.resolve 'HyperledgerDeploy'
+    await deploy.createBusinessNetworkArchiveFile(fromPath, toPath, fileName)
 
 module.exports = SetupClient
 

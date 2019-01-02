@@ -19,18 +19,22 @@ class HyperledgerDeploy
   test: () -> 0
 
   # composer archive create -t dir -n . -a sample-network@0.0.1.bna
-  createBusinessNetworkArchiveFile: (directory) =>
-    directory = '/Users/philipandrew/projects/contractpen_template_dir/contract_d25ac229-eca0-4676-9ac2-29eca0c67675_neg396196837'
-    fileName = 'test.bna'
+  # fromPath is the path to the nodejs project
+  # toPath is the path to where we wish to save the bna file
+  # fileName is the name of the file to save
+  createBusinessNetworkArchiveFile: (fromPath, toPath, fileName) =>
+    # C:\home\projects\accordtest
+    directory = fromPath #'/home/projects/accordtest'
     console.log 'create a business network archive file from accord project files'
     console.log directory
+    console.log toPath + path.sep + fileName
     nl = ''
     try
       template = await Template.fromDirectory(directory)
-      buffer = await template.toArchive('ergo')
-      saved = await saveBuffer(buffer, fileName)
+      buffer = await template.toArchive('javascript')
+      saved = await saveBuffer(buffer, toPath + path.sep + fileName)
       console.log saved
-      n1
+      nl
     catch error
       console.log error
       nl
