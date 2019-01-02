@@ -519,8 +519,9 @@ class SetupClient
     await graphQlRequest.request 'http://localhost:4000/graphQl', query
 
   createBusinessNetworkArchiveFile: (fromPath, toPath, fileName) =>
+    base = @baseTemplateDirectory
     deploy = @container.resolve 'HyperledgerDeploy'
-    await deploy.createBusinessNetworkArchiveFile(fromPath, toPath, fileName)
+    await deploy.createBusinessNetworkArchiveFile(base + path.sep + fromPath, toPath, fileName)
 
 module.exports = SetupClient
 
