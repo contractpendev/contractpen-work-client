@@ -521,7 +521,7 @@ class SetupClient
   createBusinessNetworkArchiveFile: (fromPath, toPath, fileName) =>
     base = @baseTemplateDirectory
     deploy = @container.resolve 'HyperledgerDeploy'
-    await deploy.createBusinessNetworkArchiveFile(base + path.sep + fromPath, toPath, fileName)
+    await deploy.createBusinessNetworkArchiveFile(base + fromPath, base, fileName)
 
 module.exports = SetupClient
 
