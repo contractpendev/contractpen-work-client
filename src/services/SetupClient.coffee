@@ -437,6 +437,12 @@ class SetupClient
   # Executes all handlebars templates and places them in the destination directory
   createProject: (dir, contract, origionalTemplateDir) =>
     try
+      console.log ''
+      console.log ''
+      console.log ''
+      console.log ''
+      console.log ''
+      console.log ''
       console.log 'create project'
       console.log dir
       console.log origionalTemplateDir
@@ -444,10 +450,15 @@ class SetupClient
       fse.copySync origionalTemplateDir, dir
       projectId = shortid.generate()
       projectJsonFilePath = dir + '/project.json'
+      console.log 'projectJsonFilePath:' + projectJsonFilePath + ':'
       projectJson = await fse.readJson(projectJsonFilePath)
+      console.log projectJson
+      console.log ''
       fs.unlinkSync(projectJsonFilePath)
       projectName = projectJson.name
       projectJson.name = projectName + '_' + projectId
+      console.log projectJson
+      console.log ''
       await fse.writeJson(projectJsonFilePath, projectJson)
       # hmm
       fse.removeSync dir + path.sep + 'models'
