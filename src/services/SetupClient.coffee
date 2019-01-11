@@ -449,7 +449,7 @@ class SetupClient
       #@createDirectoryIfNotExist dir
       fse.copySync origionalTemplateDir, dir
       projectId = shortid.generate()
-      projectJsonFilePath = dir + '/project.json'
+      projectJsonFilePath = dir + '/package.json'
       console.log 'projectJsonFilePath:' + projectJsonFilePath + ':'
       projectJson = await fse.readJson(projectJsonFilePath)
       console.log projectJson
