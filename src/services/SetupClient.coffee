@@ -387,8 +387,10 @@ class SetupClient
       job = JSON.parse(job)
       console.log 'job command ' + job.command
       result = @commandSwitcher job.command, job.params, job
+      console.log 'result is'
+      console.log result
       if result[0]
-        result.then (r) =>
+        result[1].then (r) =>
           console.log 'Promise finished and result is'
           console.log r
 
