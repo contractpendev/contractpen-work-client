@@ -252,9 +252,10 @@ class SetupClient
     #  console.log body
     #  return
 
-  commandSwitcher: (command, params) =>
+  commandSwitcher: (command, params, job) =>
     try
       console.log 'commandSwitcher'
+      shouldNotifyFinished = true
       result = null
       if (command == 'deploy')
         result = @deploy params[0], params[1], params[2]
@@ -287,11 +288,12 @@ class SetupClient
         result = @ciceroTemplates params[0]
       if (command == 'createBusinessNetworkArchiveFile')  
         result = @createBusinessNetworkArchiveFile params[0], params[1], params[2]
-      if (command == 'deployBusinessNetworkArchiveToHyperledger')  
-        result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1]
+      if (command == 'deployBusinessNetworkArchiveToHyperledger')
+        shouldNotifyFinished = false
+        result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1], job
       console.log 'result back'
       console.log result
-      result
+      [shouldNotifyFinished, result]
     catch e
       console.log e
       null
@@ -384,30 +386,33 @@ class SetupClient
     socket.on 'executeJob', (job) =>
       job = JSON.parse(job)
       console.log 'job command ' + job.command
-      result = @commandSwitcher job.command, job.params
-      result.then (r) =>
-        console.log 'Promise finished and result is'
-        console.log r
+      result = @commandSwitcher job.command, job.params, job
+      if result[0]
+        result.then (r) =>
+          console.log 'Promise finished and result is'
+          console.log r
 
-        # @todo Handle the error case when: if (r==null)
+          # @todo Handle the error case when: if (r==null)
 
-        # The result depends on the command
-        # deploy: If the folder exists
-        # execute: The result
-        # template: The result is the text of the template result
-        # export: The second parameter is the json file to return
-        # exportMulti: The second parameter is the json file to return
-        # directoryTree: Lists the directory tree under the path
+          # The result depends on the command
+          # deploy: If the folder exists
+          # execute: The result
+          # template: The result is the text of the template result
+          # export: The second parameter is the json file to return
+          # exportMulti: The second parameter is the json file to return
+          # directoryTree: Lists the directory tree under the path
 
-        # If the directory exists then we say success
-        workerId = @getWorkerId()
-        socket.send 'finishedJob',
-          workerId: workerId
-          job: job
-          result:
-            job: job
+          # If the directory exists then we say success
+          workerId = @getWorkerId()
+          socket.send 'finishedJob',
             workerId: workerId
-            returnResultFromFunctionExecution: r
+            job: job
+            result:
+              job: job
+              workerId: workerId
+              returnResultFromFunctionExecution: r
+      else        
+        console.log 'do not notify'
       return
 
     # When the server is connected we send back to the server that we are ready to accept commands
@@ -532,9 +537,9 @@ class SetupClient
     deploy = @container.resolve 'HyperledgerDeploy'
     await deploy.createBusinessNetworkArchiveFile(base + fromPath, base, fileName)
 
-  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid) =>
+  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, job) =>
     deploy = @container.resolve 'HyperledgerDeploy'
-    await deploy.deployBusinessNetworkArchiveToHyperledger(fileName, hyperledgerUuid)
+    await deploy.deployBusinessNetworkArchiveToHyperledger(fileName, hyperledgerUuid, job)
 
     #base = @baseTemplateDirectory
     #deploy = @container.resolve 'HyperledgerDeploy'
