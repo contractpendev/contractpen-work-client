@@ -421,6 +421,7 @@ class SetupClient
     socket.on 'serverConnected', (data) =>
       console.log 'Server called back, that means we can accept a command from the server'
       socket.send 'clientReadyToAcceptCommands', @getWorkerId()
+      console.log 'i sent clientReadyToAcceptCommands'
       # your code to execute on event
       return
 
