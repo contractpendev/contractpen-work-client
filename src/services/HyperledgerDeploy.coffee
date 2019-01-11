@@ -10,6 +10,8 @@ Engine = require('@accordproject/cicero-engine').Engine
 Ergo = require('@accordproject/ergo-compiler/lib/ergo')
 find = require 'find'
 saveBuffer = require 'save-buffer'
+config = require 'config'
+request = require 'request'
 
 class HyperledgerDeploy
 
@@ -38,6 +40,25 @@ class HyperledgerDeploy
     catch error
       console.log error
       nl
+
+  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid) =>
+    console.log 'deployBusinessNetworkArchiveToHyperledger'
+    bnaDeployUrl = config.get('server.bnaDeployUrl')
+    # uuid is the hyperledger uuid associated with the user
+    # content type application/json
+    # HTTP POST json { "uuid": "", "bnaFileName": "bnaFileName" }
+    body =
+      'uuid': hyperledgerUuid
+      'bnaFileName': fileName
+    request.post {
+      url: bnaDeployUrl
+      body: workData
+      json: true
+    }, (error, response, body) ->
+      if error
+        return console.error('error:', error)
+      console.log 'dontknow:', body
+      return
 
   # composer network install -a car-sales-network.bna -c PeerAdmin@hlfv1
   deploy: (businessNetworkArchiveFile) =>
