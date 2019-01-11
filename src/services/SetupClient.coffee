@@ -252,7 +252,7 @@ class SetupClient
     #  console.log body
     #  return
 
-  commandSwitcher: (command, params, job) =>
+  commandSwitcher: (command, params, transactionId) =>
     try
       console.log 'commandSwitcher'
       shouldNotifyFinished = true
@@ -290,10 +290,11 @@ class SetupClient
         result = @createBusinessNetworkArchiveFile params[0], params[1], params[2]
       if (command == 'deployBusinessNetworkArchiveToHyperledger')
         shouldNotifyFinished = false
-        result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1], job
+        result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1], transactionId
       console.log 'result back'
       console.log result
-      [shouldNotifyFinished, result]
+      back = [shouldNotifyFinished, result]
+      return back
     catch e
       console.log e
       null
@@ -384,27 +385,12 @@ class SetupClient
 
     # Client must execute the job as given from the server and reply the result back to the server
     socket.on 'executeJob', (job) =>
+      console.log 'executejob happened'
       job = JSON.parse(job)
-      console.log 'job command ' + job.command
-      result = await @commandSwitcher job.command, job.params, job
-      console.log 'result is'
-      console.log result
-      if result[0]
-        result[1].then (r) =>
-          console.log 'Promise finished and result is'
-          console.log r
-
-          # @todo Handle the error case when: if (r==null)
-
-          # The result depends on the command
-          # deploy: If the folder exists
-          # execute: The result
-          # template: The result is the text of the template result
-          # export: The second parameter is the json file to return
-          # exportMulti: The second parameter is the json file to return
-          # directoryTree: Lists the directory tree under the path
-
-          # If the directory exists then we say success
+      result = @commandSwitcher job.command, job.params, job
+      result.then((r) =>
+        if (r[0] == true)
+          console.log 'sending finishjob'
           workerId = @getWorkerId()
           socket.send 'finishedJob',
             workerId: workerId
@@ -412,10 +398,8 @@ class SetupClient
             result:
               job: job
               workerId: workerId
-              returnResultFromFunctionExecution: r
-      else        
-        console.log 'do not notify'
-      return
+              returnResultFromFunctionExecution: r[1]
+      )
 
     # When the server is connected we send back to the server that we are ready to accept commands
     socket.on 'serverConnected', (data) =>
@@ -540,9 +524,9 @@ class SetupClient
     deploy = @container.resolve 'HyperledgerDeploy'
     await deploy.createBusinessNetworkArchiveFile(base + fromPath, base, fileName)
 
-  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, job) =>
+  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, transactionId) =>
     deploy = @container.resolve 'HyperledgerDeploy'
-    await deploy.deployBusinessNetworkArchiveToHyperledger(fileName, hyperledgerUuid, job)
+    await deploy.deployBusinessNetworkArchiveToHyperledger(fileName, hyperledgerUuid, transactionId)
 
     #base = @baseTemplateDirectory
     #deploy = @container.resolve 'HyperledgerDeploy'
