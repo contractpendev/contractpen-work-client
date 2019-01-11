@@ -386,7 +386,7 @@ class SetupClient
     socket.on 'executeJob', (job) =>
       job = JSON.parse(job)
       console.log 'job command ' + job.command
-      result = @commandSwitcher job.command, job.params, job
+      result = await @commandSwitcher job.command, job.params, job
       console.log 'result is'
       console.log result
       if result[0]
