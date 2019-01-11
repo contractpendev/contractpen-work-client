@@ -459,7 +459,7 @@ class SetupClient
       projectJson.name = projectName + '_' + projectId
       console.log projectJson
       console.log ''
-      await fse.writeJson(projectJsonFilePath, projectJson)
+      await fse.writeJson(projectJsonFilePath, projectJson, {spaces: 2})
       # hmm
       fse.removeSync dir + path.sep + 'models'
       @createDirectoryIfNotExist dir + path.sep + 'models'
