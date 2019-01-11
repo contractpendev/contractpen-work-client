@@ -287,6 +287,8 @@ class SetupClient
         result = @ciceroTemplates params[0]
       if (command == 'createBusinessNetworkArchiveFile')  
         result = @createBusinessNetworkArchiveFile params[0], params[1], params[2]
+      if (command == 'deployBusinessNetworkArchiveToHyperledger')  
+        result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1]
       console.log 'result back'
       console.log result
       result
@@ -437,30 +439,17 @@ class SetupClient
   # Executes all handlebars templates and places them in the destination directory
   createProject: (dir, contract, origionalTemplateDir) =>
     try
-      console.log ''
-      console.log ''
-      console.log ''
-      console.log ''
-      console.log ''
-      console.log ''
-      console.log 'create project'
       console.log dir
       console.log origionalTemplateDir
       #@createDirectoryIfNotExist dir
       fse.copySync origionalTemplateDir, dir
       projectId = shortid.generate().toLowerCase()
       projectJsonFilePath = dir + '/package.json'
-      console.log 'projectJsonFilePath:' + projectJsonFilePath + ':'
       projectJson = await fse.readJson(projectJsonFilePath)
-      console.log projectJson
-      console.log ''
       fs.unlinkSync(projectJsonFilePath)
       projectName = projectJson.name
       projectJson.name = projectName + '_' + projectId
-      console.log projectJson
-      console.log ''
       await fse.writeJson(projectJsonFilePath, projectJson, {spaces: 2})
-      # hmm
       fse.removeSync dir + path.sep + 'models'
       @createDirectoryIfNotExist dir + path.sep + 'models'
         #ncp origionalTemplateDir dir
@@ -542,6 +531,14 @@ class SetupClient
     base = @baseTemplateDirectory
     deploy = @container.resolve 'HyperledgerDeploy'
     await deploy.createBusinessNetworkArchiveFile(base + fromPath, base, fileName)
+
+  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid) =>
+    deploy = @container.resolve 'HyperledgerDeploy'
+    await deploy.deployBusinessNetworkArchiveToHyperledger(fileName, hyperledgerUuid)
+
+    #base = @baseTemplateDirectory
+    #deploy = @container.resolve 'HyperledgerDeploy'
+    #await deploy.createBusinessNetworkArchiveFile(base + fromPath, base, fileName)  
 
 module.exports = SetupClient
 
