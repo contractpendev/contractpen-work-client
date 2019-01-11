@@ -43,6 +43,8 @@ class HyperledgerDeploy
 
   deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid) =>
     console.log 'deployBusinessNetworkArchiveToHyperledger'
+    console.log fileName
+    console.log hyperledgerUuid
     bnaDeployUrl = config.get('server.bnaDeployUrl')
     # uuid is the hyperledger uuid associated with the user
     # content type application/json
