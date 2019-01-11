@@ -21,6 +21,7 @@ zipIt = require('zip-a-folder')
 read = require('fs-readdir-recursive')
 memoize = require("memoizee")
 Syntax = require 'syntax'
+shortid = require 'shortid'
 
 #ncp = require('ncp').ncp
 
@@ -441,6 +442,14 @@ class SetupClient
       console.log origionalTemplateDir
       #@createDirectoryIfNotExist dir
       fse.copySync origionalTemplateDir, dir
+      projectId = shortid.generate()
+      projectJsonFilePath = dir + '/project.json'
+      projectJson = await fse.readJson(projectJsonFilePath)
+      fs.unlinkSync(projectJsonFilePath)
+      projectName = projectJson.name
+      projectJson.name = projectName + '_' + projectId
+      await fse.writeJson(projectJsonFilePath, projectJson)
+      # hmm
       fse.removeSync dir + path.sep + 'models'
       @createDirectoryIfNotExist dir + path.sep + 'models'
         #ncp origionalTemplateDir dir
