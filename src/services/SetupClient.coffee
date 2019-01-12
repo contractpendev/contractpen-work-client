@@ -390,15 +390,25 @@ class SetupClient
       result = @commandSwitcher job.command, job.params, job
       result.then((r) =>
         if (r[0] == true)
-          console.log 'sending finishjob'
+          console.log 'sending workerAvailableAndFinishedJob'
           workerId = @getWorkerId()
-          socket.send 'finishedJob',
+          socket.send 'workerAvailableAndFinishedJob',
             workerId: workerId
             job: job
             result:
               job: job
               workerId: workerId
               returnResultFromFunctionExecution: r[1]
+        else
+          console.log 'sending workerAvailable'
+          workerId = @getWorkerId()
+          socket.send 'workerAvailable',
+            workerId: workerId
+            job: job
+            result:
+              job: job
+              workerId: workerId
+              returnResultFromFunctionExecution: r[1]                
       )
 
     # When the server is connected we send back to the server that we are ready to accept commands
