@@ -55,7 +55,7 @@ class HyperledgerDeploy
       'job': job
     request.post {
       url: bnaDeployUrl
-      body: workData
+      body: body
       json: true
     }, (error, response, body) ->
       if error
