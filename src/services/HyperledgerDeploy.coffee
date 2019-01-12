@@ -42,7 +42,7 @@ class HyperledgerDeploy
       nl
 
   deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, job) =>
-    console.log 'deployBusinessNetworkArchiveToHyperledger'
+    console.log 'deployBusinessNetworkArchiveToHyperledger   '
     console.log fileName
     console.log hyperledgerUuid
     console.log 'job is'
