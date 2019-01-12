@@ -386,7 +386,11 @@ class SetupClient
     # Client must execute the job as given from the server and reply the result back to the server
     socket.on 'executeJob', (job) =>
       console.log 'executejob happened'
+      console.log 'job in'
+      console.log job
       job = JSON.parse(job)
+      console.log 'json parsed job'
+      console.log job
       result = @commandSwitcher job.command, job.params, job
       result.then((r) =>
         if (r[0] == true)
