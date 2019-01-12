@@ -55,6 +55,8 @@ class HyperledgerDeploy
       'uuid': hyperledgerUuid
       'bnaFileName': fileName
       'job': job
+    console.log 'posting body'  
+    console.log body
     request.post {
       url: bnaDeployUrl
       body: body
