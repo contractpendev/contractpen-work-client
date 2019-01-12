@@ -48,13 +48,10 @@ class HyperledgerDeploy
     console.log 'job is'
     console.log job
     bnaDeployUrl = config.get('server.bnaDeployUrl')
-    # uuid is the hyperledger uuid associated with the user
-    # content type application/json
-    # HTTP POST json { "uuid": "", "bnaFileName": "bnaFileName" }
     body =
+      'job': job
       'uuid': hyperledgerUuid
       'bnaFileName': fileName
-      'job': job
     console.log 'posting body'  
     console.log body
     request.post {
@@ -62,6 +59,7 @@ class HyperledgerDeploy
       body: body
       json: true
     }, (error, response, body) ->
+      console.log error
       if error
         return console.error('error:', error)
       console.log 'dontknow:', body
