@@ -252,7 +252,7 @@ class SetupClient
     #  console.log body
     #  return
 
-  commandSwitcher: (command, params, transactionId) =>
+  commandSwitcher: (command, params, job) =>
     try
       console.log 'commandSwitcher'
       shouldNotifyFinished = true
@@ -290,7 +290,7 @@ class SetupClient
         result = @createBusinessNetworkArchiveFile params[0], params[1], params[2]
       if (command == 'deployBusinessNetworkArchiveToHyperledger')
         shouldNotifyFinished = false
-        result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1], transactionId
+        result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1], job
       console.log 'result back'
       console.log result
       back = [shouldNotifyFinished, result]
