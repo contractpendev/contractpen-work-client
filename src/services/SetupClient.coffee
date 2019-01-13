@@ -394,15 +394,17 @@ class SetupClient
       result = @commandSwitcher job.command, job.params, job
       result.then((r) =>
         if (r[0] == true)
-          console.log 'sending workerAvailableAndFinishedJob'
-          workerId = @getWorkerId()
-          socket.send 'workerAvailableAndFinishedJob',
-            workerId: workerId
-            job: job
-            result:
-              job: job
+          r[1].then((r2) =>
+            console.log 'sending workerAvailableAndFinishedJob'
+            workerId = @getWorkerId()
+            socket.send 'workerAvailableAndFinishedJob',
               workerId: workerId
-              returnResultFromFunctionExecution: r[1]
+              job: job
+              result:
+                job: job
+                workerId: workerId
+                returnResultFromFunctionExecution: r2
+          )
         else
           console.log 'sending workerAvailable'
           workerId = @getWorkerId()
