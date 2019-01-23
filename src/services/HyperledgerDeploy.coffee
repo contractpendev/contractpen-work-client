@@ -41,7 +41,7 @@ class HyperledgerDeploy
       console.log error
       nl
 
-  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, job) =>
+  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, email, job) =>
     console.log 'deployBusinessNetworkArchiveToHyperledger   '
     console.log fileName
     console.log hyperledgerUuid
@@ -52,6 +52,7 @@ class HyperledgerDeploy
       'job': job
       'uuid': hyperledgerUuid
       'bnaFileName': fileName
+      'email': email
     console.log 'posting body'  
     console.log body
     request.post {

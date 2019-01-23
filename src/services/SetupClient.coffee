@@ -290,7 +290,7 @@ class SetupClient
         result = @createBusinessNetworkArchiveFile params[0], params[1], params[2]
       if (command == 'deployBusinessNetworkArchiveToHyperledger')
         shouldNotifyFinished = false
-        result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1], job
+        result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1], params[2], job
       console.log 'result back'
       console.log result
       back = [shouldNotifyFinished, result]
@@ -551,9 +551,9 @@ class SetupClient
     deploy = @container.resolve 'HyperledgerDeploy'
     await deploy.createBusinessNetworkArchiveFile(base + fromPath, base, fileName)
 
-  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, transactionId) =>
+  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, email, transactionId) =>
     deploy = @container.resolve 'HyperledgerDeploy'
-    await deploy.deployBusinessNetworkArchiveToHyperledger(fileName, hyperledgerUuid, transactionId)
+    await deploy.deployBusinessNetworkArchiveToHyperledger(fileName, hyperledgerUuid, email, transactionId)
 
     #base = @baseTemplateDirectory
     #deploy = @container.resolve 'HyperledgerDeploy'
