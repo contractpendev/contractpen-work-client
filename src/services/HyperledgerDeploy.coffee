@@ -12,6 +12,9 @@ find = require 'find'
 saveBuffer = require 'save-buffer'
 config = require 'config'
 request = require 'request'
+tempDir = require 'temp-dir'
+uniqueFilename = require 'unique-filename'
+unzip = require 'unzip'
 
 class HyperledgerDeploy
 
@@ -30,11 +33,29 @@ class HyperledgerDeploy
     console.log 'create a business network archive file from accord project files'
     console.log directory
     console.log toPath + path.sep + fileName
-    nl = ''
+    nl = ''  
     try
       template = await Template.fromDirectory(directory)
       buffer = await template.toArchive('javascript')
       saved = await saveBuffer(buffer, toPath + path.sep + fileName)
+      #
+      #tempFileName = uniqueFilename(tempDir, 'tempzip')
+      #bnaTempFileName = tempFileName
+      #console.log('will save bna file to ' + bnaTempFileName)
+      #saved = await saveBuffer(buffer, bnaTempFileName)
+      # Extract to a temp directory
+      #fs.mkdirSync(tempDir)
+      #extractToDirectory = uniqueFilename(tempDir, 'tempdir')
+      #fs.createReadStream(bnaTempFileName).pipe(unzip.Extract(path: extractToDirectory)).on 'close', ->
+      #  console.log 'a'
+      #  return
+      #fs.createReadStream(bnaTempFileName).pipe unzip.Extract(path: extractToDirectory)
+      # Change logic javascript file
+      # Compress back into a archive and save to bnaFileName
+      #bnaFileName = toPath + path.sep + fileName
+      # @todo Save archive
+      # @todo Delete temp files
+      
       console.log saved
       nl
     catch error
