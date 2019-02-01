@@ -476,7 +476,7 @@ class SetupClient
       #fs.unlinkSync(projectJsonFilePath)
       projectName = projectJson.name
       console.log '7'
-      projectJson.name = projectName #+ '-' + projectId
+      projectJson.name = projectName + '-' + projectId
       console.log '8'
       #projectJson.dependencies = {
       #  'fabric-shim': '^1.4.0'
@@ -493,10 +493,9 @@ class SetupClient
       #};
       console.log '11'
       #projectJson.dependencies = {
-      #  '@accordproject/cicero-core': '^0.9.8',
-      #  '@accordproject/cicero-engine': '^0.9.8',
       #  'fabric-shim': '~1.3.0'
       #};
+      #projectJson.engineStrict = true;
       console.log '12'
       console.log('I write to package.json at ' + dir)
       console.log '13'
@@ -507,7 +506,7 @@ class SetupClient
       console.log('done write')
       console.log '16'
       # Add the hyperledger fabric chaincodeddd
-      fse.copySync('./template/chaincode.js', dir + path.sep + 'chaincode.js')
+      #fse.copySync('./template/chaincode.js', dir + path.sep + 'chaincode.js')
       console.log '16b'
       #fse.moveSync(dir + path.sep + 'lib' + path.sep + 'logic.js', dir + path.sep + 'lib' + path.sep + 'accord.js')
       console.log '16c'

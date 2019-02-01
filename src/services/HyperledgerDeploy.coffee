@@ -15,6 +15,13 @@ request = require 'request'
 tempDir = require 'temp-dir'
 uniqueFilename = require 'unique-filename'
 unzip = require 'unzip'
+zipIt = require 'zip-a-folder'
+packer = require 'dir-packer'
+JSZip = require 'jszip'
+decompress = require 'decompress'
+rimraf = require 'rimraf'
+recursive = require "recursive-readdir"
+fse = require 'fs-extra'
 
 class HyperledgerDeploy
 
@@ -35,9 +42,64 @@ class HyperledgerDeploy
     console.log toPath + path.sep + fileName
     nl = ''  
     try
+      #f = directory
+      #a = toPath + path.sep + fileName
+      #await zipIt.zip(f, a)
       template = await Template.fromDirectory(directory)
       buffer = await template.toArchive('javascript')
       saved = await saveBuffer(buffer, toPath + path.sep + fileName)
+      #console.log 'before -------------------'
+      #tempFileName = uniqueFilename(tempDir, 'tempzip')
+      #console.log('will save bna file to ' + tempFileName)
+      #saved = await saveBuffer(buffer, tempFileName)  
+      # Extract zip to a temp folder
+      #tempDirName = uniqueFilename(tempDir, 'tempzipdir')
+      #console.log 'temp dir'
+      #console.log tempDirName
+      #fs.mkdirSync(tempDirName)
+      #console.log tempFileName
+      #tempDirName2 = tempDirName + '/'
+      #await decompress(tempFileName, tempDirName2)
+      # Modify folders contents
+      #fse.copySync('./template/chaincode.js', tempDirName2 + 'chaincode.js')
+      #fs.unlinkSync(tempDirName2 + 'lib/logic.js')
+      #projectJsonFilePath = tempDirName2 + '/package.json'
+      #projectJson = await fse.readJson(projectJsonFilePath)
+      #projectName = projectJson.name
+      #projectJson.name = projectName #+ '-' + projectId
+      #projectJson.dependencies = {
+      #  'fabric-shim': '^1.4.0'
+      #};
+      #projectJson.scripts = {
+      #  start: 'node chaincode.js'
+      #};
+      #projectJson['engine-strict'] = true;
+      #projectJson.engines = {
+      #  node: '>=8.4.0',
+      #  npm: '>=5.3.0'
+      #};
+      #projectJson.dependencies = {
+      #  'fabric-shim': '~1.3.0'
+      #};
+      #projectJson.engineStrict = true;
+      #fs.unlinkSync(projectJsonFilePath)
+      #await fse.writeJson(projectJsonFilePath, projectJson, {spaces: 2})
+      # Zip into a new zip file
+      #zip = new JSZip
+      #contents = await recursive(tempDirName2)
+      #for d in contents
+      #  f = fs.readFileSync(d, 'utf8')
+      #  pathTrimmed = d.slice(tempDirName2.length)
+      #  zip.file(pathTrimmed, f)
+      #console.log ''
+      #console.log contents
+      #console.log ''
+      #result = await zip.generateAsync(type: 'nodebuffer')
+      ## Delete temp 
+      #rimraf.sync(tempFileName)
+      #rimraf.sync(tempDirName)
+      #console.log 'after -------------------'
+      #saved = await saveBuffer(result, toPath + path.sep + fileName)
       #
       #tempFileName = uniqueFilename(tempDir, 'tempzip')
       #bnaTempFileName = tempFileName
