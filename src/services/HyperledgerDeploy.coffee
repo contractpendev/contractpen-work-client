@@ -124,6 +124,39 @@ class HyperledgerDeploy
       console.log error
       nl
 
+  executeHyperledgerContract: (contractLogicalName, hyperledgerUuid, email, base64RequestJson, job) =>
+    try
+      console.log 'job is'
+      console.log job
+      console.log ''
+      console.log 'execute hyperledger contract --------------------------------------------------------------------------'
+      console.log 'contractLogicalName:' + contractLogicalName
+      console.log 'hyperledgerUuid:' + hyperledgerUuid
+      console.log 'email:' + email
+      console.log 'base64RequestJson:' + base64RequestJson
+      console.log ''
+      bnaDeployUrl = config.get('server.executeHyperledgerContractUrl')
+      body =
+        'contractLogicalName': contractLogicalName,
+        'hyperledgerUuid': hyperledgerUuid,
+        'email': email,
+        'base64RequestJson': base64RequestJson,
+        'job': job
+      console.log 'posting body'  
+      console.log body
+      request.post {
+        url: bnaDeployUrl
+        body: body
+        json: true
+      }, (error, response, body) ->
+        console.log error
+        if error
+          return console.error('error:', error)
+        console.log 'dontknow:', body
+        return
+    catch e 
+      console.log e   
+
   deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, email, job) =>
     console.log 'deployBusinessNetworkArchiveToHyperledger   '
     console.log fileName

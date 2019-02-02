@@ -289,6 +289,9 @@ class SetupClient
         result = @ciceroTemplates params[0]
       if (command == 'createBusinessNetworkArchiveFile')  
         result = @createBusinessNetworkArchiveFile params[0], params[1], params[2]
+      if (command == 'executeHyperledgerContract')
+        shouldNotifyFinished = false
+        result = @executeHyperledgerContract params[0], params[1], params[2], params[3], job
       if (command == 'deployBusinessNetworkArchiveToHyperledger')
         shouldNotifyFinished = false
         result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1], params[2], job
@@ -597,6 +600,10 @@ class SetupClient
     base = @baseTemplateDirectory
     deploy = @container.resolve 'HyperledgerDeploy'
     await deploy.createBusinessNetworkArchiveFile(base + fromPath, base, fileName)
+
+  executeHyperledgerContract: (contractLogicalName, hyperledgerUuid, email, base64RequestJson, job) =>  
+    deploy = @container.resolve 'HyperledgerDeploy'
+    await deploy.executeHyperledgerContract(contractLogicalName, hyperledgerUuid, email, base64RequestJson, job)
 
   deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, email, transactionId) =>
     deploy = @container.resolve 'HyperledgerDeploy'
