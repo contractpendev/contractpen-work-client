@@ -110,10 +110,10 @@ class SetupClient
 
     program.parse process.argv
 
-  deploy: (guid, directoryToCreate, origionalTemplateDir) =>
+  deploy: (guid, directoryToCreate, origionalTemplateDir, ergoCode) =>
     dir = @baseTemplateDirectory + directoryToCreate
     contractJson = await @fetchContractJsonFromServer guid
-    await @createProject dir, contractJson, origionalTemplateDir
+    await @createProject dir, contractJson, origionalTemplateDir, ergoCode
 
   templateProcess: (jsonData, grammar, directory) =>
     try
@@ -259,7 +259,7 @@ class SetupClient
       shouldNotifyFinished = true
       result = null
       if (command == 'deploy')
-        result = @deploy params[0], params[1], params[2]
+        result = @deploy params[0], params[1], params[2], params[3]
       if (command == 'execute')
         result = @execute params[0], params[1], params[2], params[3]
       if (command == 'execute2')
@@ -294,7 +294,7 @@ class SetupClient
         result = @executeHyperledgerContract params[0], params[1], params[2], params[3], job
       if (command == 'deployBusinessNetworkArchiveToHyperledger')
         shouldNotifyFinished = false
-        result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1], params[2], job
+        result = @deployBusinessNetworkArchiveToHyperledger params[0], params[1], params[2], params[4], job
       console.log 'result back'
       console.log result
       back = [shouldNotifyFinished, result]
@@ -460,82 +460,23 @@ class SetupClient
   idName: (name) -> name.trim().split(' ').join('_').toLowerCase()
 
   # Executes all handlebars templates and places them in the destination directory
-  createProject: (dir, contract, origionalTemplateDir) =>
+  createProject: (dir, contract, origionalTemplateDir, ergoCode) =>
     try
-      console.log 'createProject123createProject123createProject123createProject123createProject123createProject123createProject123createProject123'
-      console.log dir
-      console.log origionalTemplateDir
-      #@createDirectoryIfNotExist dir
       fse.copySync origionalTemplateDir, dir
-      console.log '2'
-      #shortid.characters('0123456789abcdefghijklmnopqrstuvwxyz')
-      console.log '3'
       projectId = shortid.generate().toLowerCase()
-      console.log '4'
       projectJsonFilePath = origionalTemplateDir + '/package.json'
-      console.log '5'
       projectJson = await fse.readJson(projectJsonFilePath)
-      console.log '6'
-      #fs.unlinkSync(projectJsonFilePath)
       projectName = projectJson.name
-      console.log '7'
       projectJson.name = projectName + '-' + projectId
-      console.log '8'
-      #projectJson.dependencies = {
-      #  'fabric-shim': '^1.4.0'
-      #};
-      console.log '9'
-      #projectJson.scripts = {
-      #  start: 'node chaincode.js'
-      #};
-      #projectJson['engine-strict'] = true;
-      console.log '10'
-      #projectJson.engines = {
-      #  node: '>=8.4.0',
-      #  npm: '>=5.3.0'
-      #};
-      console.log '11'
-      #projectJson.dependencies = {
-      #  'fabric-shim': '~1.3.0'
-      #};
-      #projectJson.engineStrict = true;
-      console.log '12'
-      console.log('I write to package.json at ' + dir)
-      console.log '13'
-      console.log(projectJson)
-      console.log '14'
       await fse.writeJson(dir + '/package.json', projectJson, {spaces: 2})
-      console.log '15'
-      console.log('done write')
-      console.log '16'
-      # Add the hyperledger fabric chaincodeddd
-      #fse.copySync('./template/chaincode.js', dir + path.sep + 'chaincode.js')
-      console.log '16b'
-      #fse.moveSync(dir + path.sep + 'lib' + path.sep + 'logic.js', dir + path.sep + 'lib' + path.sep + 'accord.js')
-      console.log '16c'
-      # Next line not allowed
-      #fse.copySync('./template/logic.js', dir + path.sep + 'lib' + path.sep + 'mylogic.js')
-      console.log '17'
       # Add models
       fse.removeSync dir + path.sep + 'models'
-      console.log '18'
       @createDirectoryIfNotExist dir + path.sep + 'models'
-      console.log '19'
       @createFile dir + path.sep + 'models' + path.sep + 'model.cto', @template('model.cto.hbs', {dataModels: contract.contract.dataModels})
-      console.log '20'
-      console.log ''
-      console.log ''
-      console.log ''
-      console.log ''
-      console.log ''
+      # Write ergoCode to lib/logic.ergo
+      @createFile dir + path.sep + 'lib' + path.sep + 'logic.ergo', ergoCode
     catch e
       console.log e
-      console.log ''
-      console.log ''
-      console.log ''
-      console.log ''
-      console.log ''
-      console.log ''
       e
 
   # Executes the handlebars template with the data as given

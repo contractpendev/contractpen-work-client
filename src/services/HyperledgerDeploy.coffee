@@ -157,7 +157,7 @@ class HyperledgerDeploy
     catch e 
       console.log e   
 
-  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, email, job) =>
+  deployBusinessNetworkArchiveToHyperledger: (fileName, hyperledgerUuid, email, job, clauseJson) =>
     console.log 'deployBusinessNetworkArchiveToHyperledger   '
     console.log fileName
     console.log hyperledgerUuid
@@ -169,6 +169,7 @@ class HyperledgerDeploy
       'uuid': hyperledgerUuid
       'bnaFileName': fileName
       'email': email
+      'clauseJson': clauseJson
     console.log 'posting body'  
     console.log body
     request.post {
