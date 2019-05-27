@@ -7,7 +7,7 @@ Template = require('@accordproject/cicero-core').Template
 Clause = require('@accordproject/cicero-core').Clause
 #MetaData = require('@accordproject/cicero-core/lib/metadata')
 Engine = require('@accordproject/cicero-engine').Engine
-Ergo = require('@accordproject/ergo-compiler/lib/ergo')
+Ergo = require('@accordproject/ergo-compiler/lib/compiler')
 find = require 'find'
 decycle = require('json-decycle').decycle
 file = require 'file-normalize'
@@ -145,9 +145,9 @@ class ContractMetadata
       hash = template.getHash()
       identifier = template.getIdentifier()
       metadata = template.getMetadata()
-      templateAst = template.getTemplateAst()
+      templateAst = template.parserManager.getTemplateAst()
       # a string of the grammar
-      grammar = template.getTemplatizedGrammar()
+      #grammar = template.getTemplatizedGrammar()
       # arrays of strings
       requestTypes = template.getRequestTypes()
       responseTypes = template.getResponseTypes()
@@ -161,7 +161,7 @@ class ContractMetadata
         identifier: identifier
         metadata: metadata
         templateAst: templateAst
-        grammar: grammar
+        grammar: null #grammar
         requestTypes: requestTypes
         responseTypes: responseTypes
         emitTypes: emitTypes

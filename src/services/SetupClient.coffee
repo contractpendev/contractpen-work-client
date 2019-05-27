@@ -110,16 +110,17 @@ class SetupClient
 
     program.parse process.argv
 
-  deploy: (guid, directoryToCreate, origionalTemplateDir, ergoCode) =>
+  deploy: (guid, directoryToCreate, origionalTemplateDir, ergoCode, templateText) =>
     dir = @baseTemplateDirectory + directoryToCreate
     contractJson = await @fetchContractJsonFromServer guid
-    await @createProject dir, contractJson, origionalTemplateDir, ergoCode
+    await @createProject dir, contractJson, origionalTemplateDir, ergoCode, templateText
 
   templateProcess: (jsonData, grammar, directory) =>
     try
+      grammar2 = grammar.replace(/&quot;/g,'"')
       t = @container.resolve "ContractTemplate"
       dir = @baseTemplateDirectory + directory
-      await t.template(jsonData, grammar, dir)
+      await t.template(jsonData, grammar2, dir)
     catch e
       console.log e
       ''
@@ -251,7 +252,7 @@ class SetupClient
     #  if err
     #    return console.log(err)
     #  console.log body
-    #  return
+    #  return  
 
   commandSwitcher: (command, params, job) =>
     try
@@ -259,7 +260,7 @@ class SetupClient
       shouldNotifyFinished = true
       result = null
       if (command == 'deploy')
-        result = @deploy params[0], params[1], params[2], params[3]
+        result = @deploy params[0], params[1], params[2], params[3], params[4]
       if (command == 'execute')
         result = @execute params[0], params[1], params[2], params[3]
       if (command == 'execute2')
@@ -460,7 +461,7 @@ class SetupClient
   idName: (name) -> name.trim().split(' ').join('_').toLowerCase()
 
   # Executes all handlebars templates and places them in the destination directory
-  createProject: (dir, contract, origionalTemplateDir, ergoCode) =>
+  createProject: (dir, contract, origionalTemplateDir, ergoCode, templateText) =>
     try
       fse.copySync origionalTemplateDir, dir
       projectId = shortid.generate().toLowerCase()
@@ -473,8 +474,11 @@ class SetupClient
       fse.removeSync dir + path.sep + 'models'
       @createDirectoryIfNotExist dir + path.sep + 'models'
       @createFile dir + path.sep + 'models' + path.sep + 'model.cto', @template('model.cto.hbs', {dataModels: contract.contract.dataModels})
+      templateText2 = templateText.replace(/&quot;/g,'"')
+      @createFile dir + path.sep + 'grammar' + path.sep + 'template.tem', templateText2
       # Write ergoCode to lib/logic.ergo
-      @createFile dir + path.sep + 'lib' + path.sep + 'logic.ergo', ergoCode
+      if (ergoCode.trim().length != 0)
+        @createFile dir + path.sep + 'lib' + path.sep + 'logic.ergo', ergoCode
     catch e
       console.log e
       e

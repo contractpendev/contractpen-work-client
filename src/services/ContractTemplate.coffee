@@ -7,7 +7,7 @@ Template = require('@accordproject/cicero-core').Template
 Clause = require('@accordproject/cicero-core').Clause
 Commands = require('@accordproject/cicero-cli/lib/commands')
 Engine = require('@accordproject/cicero-engine').Engine
-Ergo = require('@accordproject/ergo-compiler/lib/ergo')
+Ergo = require('@accordproject/ergo-compiler/lib/compiler')
 find = require 'find'
 
 class ContractTemplate
@@ -20,6 +20,11 @@ class ContractTemplate
   template: (jsonData, grammar, directory) =>
     console.log 'template called with directory'
     console.log directory
+    console.log 'grammar is'
+    console.log grammar
+    console.log 'json data'
+    console.log jsonData
+    
     nl = ''
     try
       template = await Template.fromDirectory(directory)
