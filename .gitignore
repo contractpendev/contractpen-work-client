@@ -1,7 +1,7 @@
 config/default.json
 *compiled.js
 *.js.map
-
+target
 
 # Created by https://www.gitignore.io/api/node,coffeescript,intellij+all
 
