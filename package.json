@@ -33,7 +33,7 @@
     "fs-extra": "^7.0.0",
     "fs-readdir-recursive": "^1.1.0",
     "graphql-request": "^1.8.2",
-    "handlebars": "^4.0.12",
+    "handlebars": "^4.4.5",
     "handlebars-helpers": "^0.10.0",
     "html-entities": "^1.2.1",
     "json-decycle": "^1.0.0",
