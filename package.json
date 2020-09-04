@@ -25,7 +25,7 @@
     "commander": "^2.18.0",
     "config": "^3.0.1",
     "create-if-not-exist": "0.0.2",
-    "decompress": "^4.2.0",
+    "decompress": "^4.2.1",
     "dir-packer": "^0.1.1",
     "express": "^4.16.3",
     "file-normalize": "^1.1.2",
