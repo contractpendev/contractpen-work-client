@@ -27,7 +27,7 @@
     "create-if-not-exist": "0.0.2",
     "decompress": "^4.2.0",
     "dir-packer": "^0.1.1",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "file-normalize": "^1.1.2",
     "find": "^0.2.9",
     "fs-extra": "^7.0.0",
