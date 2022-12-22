@@ -11,9 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@accordproject/cicero-cli": "^0.12.3",
+    "@accordproject/cicero-cli": "^0.24.0",
     "@accordproject/cicero-core": "^0.12.3",
-    "@accordproject/cicero-engine": "^0.12.3",
+    "@accordproject/cicero-engine": "^0.24.0",
     "@accordproject/ergo-compiler": "^0.8.2",
     "@dagrejs/graphlib": "^2.1.4",
     "awilix": "^3.0.9",
