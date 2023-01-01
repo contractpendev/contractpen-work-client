@@ -23,7 +23,7 @@
     "clusterws-client-js": "git+https://github.com/fundon/ClusterWS-Client-JS.git",
     "comedy": "^1.6.0",
     "commander": "^2.18.0",
-    "config": "^3.0.1",
+    "config": "^3.3.8",
     "create-if-not-exist": "0.0.2",
     "decompress": "^4.2.0",
     "dir-packer": "^0.1.1",
